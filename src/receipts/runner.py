@@ -13,7 +13,7 @@ import urllib.error
 import urllib.request
 
 from .evidence import canonical_hash
-from .evaluation import load_suite, request_payload, score, summarize
+from . import evaluation, evaluation_v2
 
 ENDPOINT = "https://api.openai.com/v1/responses"
 DEFAULT_MODEL = "gpt-5.4-mini-2026-03-17"
@@ -62,10 +62,13 @@ def api_call(payload, key):
             "response_sha256": hashlib.sha256(raw).hexdigest(), "text": text}
 
 
-def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False):
+def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False, suite="v0.1"):
     if not 1 <= case_limit <= 24 or not 256 <= max_output_tokens <= 2048:
         raise ValueError("case_limit must be 1..24 and max_output_tokens 256..2048")
-    cases, gold = load_suite(root)
+    if suite not in ("v0.1", "v0.2"):
+        raise ValueError("Unknown suite; choose v0.1 or v0.2")
+    evaluator = evaluation if suite == "v0.1" else evaluation_v2
+    cases, gold = evaluator.load_suite(root)
     selected = list(cases)
     random.Random(seed).shuffle(selected)
     selected = selected[:case_limit]
@@ -95,13 +98,21 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False)
                 "selected_case_ids": [c["case_id"] for c in selected],
                 "call_order": [[c["case_id"], v] for c, v in tasks],
                 "limitation": "Synthetic development suite, not a held-out benchmark or truth certification."}
+    if suite == "v0.2":
+        metadata = evaluator.load_metadata(root)
+        manifest.update(format="receipts-eval-v0.2", suite_version=suite,
+                        scoring_version=suite, suite_metadata_sha256=canonical_hash(metadata),
+                        seed_for_case_selection_and_call_order=seed,
+                        independent_human_review=metadata["independent_human_review"])
+        del manifest["seed_for_order_only"]
+        save(output / "suite.json", metadata)
     save(output / "manifest.json", manifest)
     # Preserve the actual inputs and rubrics, not just their hashes.
     save(output / "cases.json", cases)
     save(output / "gold.json", gold)
     save(output / "prompts.json", prompts)
     if dry_run:
-        save(output / "requests.json", [request_payload(model, prompts[v], c, max_output_tokens) for c, v in tasks])
+        save(output / "requests.json", [evaluator.request_payload(model, prompts[v], c, max_output_tokens) for c, v in tasks])
         manifest.update(status="dry_run_no_inference", ended_at_utc=now())
         save(output / "manifest.json", manifest)
         return 0
@@ -114,7 +125,7 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False)
     records, failed = [], False
     with (output / "results.jsonl").open("w", encoding="utf-8") as stream:
         for case, variant in tasks:
-            payload = request_payload(model, prompts[variant], case, max_output_tokens)
+            payload = evaluator.request_payload(model, prompts[variant], case, max_output_tokens)
             record = {"case_id": case["case_id"], "variant": variant,
                       "request_sha256": canonical_hash(payload), "started_at_utc": now()}
             start = time.monotonic()
@@ -129,7 +140,7 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False)
                     except (ValueError, TypeError):
                         answer = None
                 record["answer"] = answer
-                record["score"] = score(answer, case, gold[case["case_id"]])
+                record["score"] = evaluator.score(answer, case, gold[case["case_id"]])
                 record["status"] = "scored" if record["score"]["valid"] else "invalid_output"
                 failed = failed or not record["score"]["valid"]
             except RuntimeError as exc:
@@ -145,7 +156,7 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False)
             print(f"{len(records)}/{len(tasks)} {case['case_id']} {variant}: {record['status']}", flush=True)
             if record["status"] == "api_error":
                 break  # Stop on auth/rate/network errors; no expensive retry loop.
-    summary = summarize(records)
+    summary = evaluator.summarize(records)
     save(output / "summary.json", summary)
     lines = ["# RECEIPTS model evaluation", "", "Synthetic development cases; human review of rationales remains necessary.", "",
              "| Prompt | Attempts | Correct verdicts | Unsupported support | Unnecessary abstention | Invalid | API errors |",
@@ -153,6 +164,9 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False)
     for variant, s in summary.items():
         lines.append(f"| {variant} | {s['attempted']} | {s['verdict_correct']} | {s['unsupported_support']} | {s['unnecessary_abstention']} | {s['invalid_outputs']} | {s['api_errors']} |")
     lines += ["", "A completed experiment is not evidence that the harness improved the model. Compare actual results, inspect failures, and repeat on independently authored held-out cases.", ""]
+    if suite == "v0.2":
+        lines = evaluator.summary_lines(summary)
+        save(output / "human-review-template.json", evaluator.review_template(records))
     (output / "summary.md").write_text("\n".join(lines))
     manifest.update(status="completed_with_errors" if failed else "completed", ended_at_utc=now())
     save(output / "manifest.json", manifest)
@@ -164,12 +178,13 @@ def main(argv=None):
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--suite", choices=("v0.1", "v0.2"), default="v0.1")
     parser.add_argument("--cases", type=int, default=16)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-output-tokens", type=int, default=1200)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
-    return run(args.root, args.output, args.model, args.cases, args.seed, args.max_output_tokens, args.dry_run)
+    return run(args.root, args.output, args.model, args.cases, args.seed, args.max_output_tokens, args.dry_run, args.suite)
 
 
 if __name__ == "__main__":

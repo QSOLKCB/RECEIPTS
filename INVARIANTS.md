@@ -7,7 +7,8 @@ the failure would violate the preservation rules.
 
 The enforcement descriptions below distinguish executable checks from researcher
 responsibilities. A prompt can express a requirement without enforcing it. The
-current implementation is v0.1.0, a bounded evidence-packet prototype.
+current implementation is a bounded evidence-packet prototype with the original
+v0.1 contract and an explicitly selected v0.2 development suite/scorer.
 
 ## Evidence and interpretation
 
@@ -250,6 +251,29 @@ Unit and integration tests cover output/request parity, paths, failures, secret
 forwarding, Unix signal/timeout cancellation and paid-mode gating without provider
 calls. The CLI is not a sandbox, and its paid-intent flag is not independent proof
 of user authorization.
+
+### INV-20 — Versioned evaluation separates validity, labels and prose
+
+Keep v0.1 cases, gold, prompts and historical score semantics unchanged. New
+claim semantics use new IDs and explicit suite/scoring versions. v0.2 declares
+factual versus evidentiary-sufficiency propositions, scope and source origins;
+rejecting evidence sufficiency does not negate the underlying factual event.
+Rubric justifications, counterfactual examples, lineage and review status never
+enter model requests.
+
+Strict verdict accuracy includes invalid outputs and API errors in its attempt
+denominator. A recognized-label diagnostic is separate and cannot repair an
+invalid ID or schema. Unsupported support and unsupported contradiction are
+explicit valid-output counts, with denominators reported. Citation/caveat code
+presence does not establish citation entailment, rationale fidelity or caveat
+adequacy. Those dimensions stay unassessed pending substantive human review.
+
+**Enforcement:** separate v0.2 packet/scoring code, explicit suite selection,
+allowlisted input construction, tests of every verdict pairing and failure
+denominator, and offline replay of all 128 historical request hashes, scores and
+summaries. Review worksheets bind to canonical result hashes and are saved as
+dated copies; no automated prose judge or human adjudication is implied. Rubric
+validity remains a review task, and current labels are not independently reviewed.
 
 ## Verification and changes
 

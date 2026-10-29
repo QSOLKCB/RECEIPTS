@@ -1,4 +1,4 @@
-# The first experiment
+# The first experiment (v0.1, preserved)
 
 The unit of evaluation is one atomic claim against a supplied evidence packet.
 No model gets the entire repository, the gold file, browser access, or a tool that
@@ -72,3 +72,31 @@ Before real-world use, human reviewers must examine whether the rationale entail
 the verdict, whether cited content actually supports it, whether alternative
 explanations were fairly considered, and whether consequential claims exceed the
 evidence. There is no universal numeric trust threshold in this release.
+
+## Opt-in v0.2 semantics and scoring
+
+The [v0.2 suite and scoring contract](../evals/v0.2/README.md) implements the first
+roadmap milestone. It gives factual propositions and evidentiary-sufficiency
+propositions distinct IDs and types, with explicit scopes, origins, cutoffs,
+justified rubrics and counterfactual examples for all three verdicts. Its 16
+development cases have five supported, six contradicted and five insufficient
+labels, all AI-assisted and not independently human-adjudicated.
+
+Use `--suite v0.2` in Python or the Rust CLI. The default remains v0.1, including
+the historical evaluator and request format. No original case, label or result
+is reinterpreted. Both versions use the same response schema and unchanged prompts;
+v0.2 adds declared claim semantics and scope to both prompts' evidence input.
+
+The new scorer reports unsupported contradiction explicitly. Strict validity,
+strict accuracy, recognized-label agreement, citation/caveat presence and pending
+human assessments have separate fields and denominators. The label-only diagnostic
+can agree with gold on an invalid answer, but it never upgrades that answer to a
+strict success. Unknown/missing labels have no diagnostic value. Human review
+dimensions are not inferred from tags, verdicts or keyword presence.
+
+The new run format is `receipts-eval-v0.2`; summaries/scores identify their scoring
+version. A review worksheet binds each attempted result to its canonical record
+hash. Human reviewers save dated copies instead of changing generated records.
+The implementation makes no claim of rubric independence or model improvement.
+It does not perform another experiment or implement the next milestone's
+suggested-action evaluator. See the suite README for fields and migration limits.

@@ -37,6 +37,7 @@ const EVAL_HELP: &str = "Usage: receipts [GLOBAL OPTIONS] eval prepare|run [OPTI
 
   --output DIR                   Required fresh artifact directory; never overwritten
   --model ID                     Required for run; prepare uses the Python default if omitted
+  --suite VERSION                v0.1 (default) or opt-in v0.2 claim-semantics suite
   --cases N                      1..16 cases, two calls each (default: 16)
   --seed N                       Unsigned integer for case selection and call order (default: 42)
   --max-output-tokens N           256..2048 per call (default: 1200)
@@ -128,7 +129,13 @@ fn evaluate(args: &[OsString]) -> Result<Action, String> {
             .ok_or("evaluation option names must be UTF-8")?;
         if !matches!(
             flag,
-            "--model" | "--output" | "--cases" | "--seed" | "--max-output-tokens" | "--allow-paid"
+            "--model"
+                | "--suite"
+                | "--output"
+                | "--cases"
+                | "--seed"
+                | "--max-output-tokens"
+                | "--allow-paid"
         ) {
             return Err("unknown evaluation option; see 'receipts eval --help'".into());
         }
@@ -141,6 +148,9 @@ fn evaluate(args: &[OsString]) -> Result<Action, String> {
             }
         } else {
             let value = take_value(args, &mut index, flag)?;
+            if flag == "--suite" && value != "v0.1" && value != "v0.2" {
+                return Err("--suite must be v0.1 or v0.2".into());
+            }
             if matches!(flag, "--cases" | "--seed" | "--max-output-tokens") {
                 let n = value
                     .to_str()
@@ -419,6 +429,18 @@ mod tests {
             "--output",
             "run",
             "--allow-paid"
+        ])
+        .is_err());
+    }
+
+    #[test]
+    fn suite_selection_is_explicit_and_allowlisted() {
+        for suite in ["v0.1", "v0.2"] {
+            assert!(options(&["eval", "prepare", "--output", "run", "--suite", suite]).is_ok());
+        }
+        assert!(options(&["eval", "prepare", "--output", "run", "--suite", "../v0.1"]).is_err());
+        assert!(options(&[
+            "eval", "prepare", "--output", "run", "--suite", "v0.1", "--suite", "v0.2"
         ])
         .is_err());
     }

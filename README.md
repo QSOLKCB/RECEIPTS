@@ -57,6 +57,25 @@ The dry run prepares **32 requests: 16 cases × two prompts**. It does not conta
 a model or generate performance scores. Use a fresh output directory for every
 experiment; existing results are never overwritten.
 
+## Opt-in claim-semantics development suite
+
+Roadmap milestone 1 adds [the v0.2 suite](evals/v0.2/README.md): 16 explicitly scoped
+claims that separate what happened from what particular evidence establishes.
+It includes supported and contradicted controls, counts unsupported contradiction
+as well as unsupported support, and separates output validity from verdict-label
+agreement. Citation entailment, rationale fidelity and caveat adequacy remain
+unassessed until substantive human review; a saved review template makes that
+status explicit. Labels are AI-assisted and have not been independently adjudicated.
+
+```bash
+receipts eval prepare --suite v0.2 --output artifacts/prepared-v02
+```
+
+This prepares 32 requests without inference. The default suite and existing paid
+workflows remain v0.1. New suite/scoring versions are explicit in v0.2 artifacts;
+the original cases, prompts, scores and 128 historical responses stay unchanged.
+These are development fixtures, not a held-out benchmark or new model results.
+
 ## Run a model through GitHub Actions
 
 1. Add an `OPENAI_API_KEY` repository secret in **Settings → Secrets and variables

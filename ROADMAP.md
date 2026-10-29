@@ -29,6 +29,18 @@ JSON/exit-status contracts and keep the archived four-model results unchanged.
 
 ## 1. Clarify claims and evaluation semantics
 
+**Implemented as an opt-in development contract:** [v0.2](evals/v0.2/README.md)
+adds 16 scoped atomic claims, splits payment/control and style sufficiency from
+factual propositions, records three-way rubric examples and unreviewed label
+status, and separates strict validity, label agreement, directional errors and
+pending human prose review. Rust and Python select it explicitly with
+`--suite v0.2`; default v0.1 behavior and all historical records remain unchanged.
+Offline tests replay the 128 original requests/scores/summaries and exercise the
+new schema, error counts and CLI boundary. Independent human adjudication and
+model runs on this new suite have not been performed.
+
+The milestone's design and acceptance criteria are retained below:
+
 Create a new, versioned development suite that distinguishes factual propositions
 from claims about evidentiary sufficiency. In particular, split the payment/control
 and tiny-style-sample questions without relabelling their historical versions.

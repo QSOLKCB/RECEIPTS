@@ -1,0 +1,11 @@
+{
+  "suite_version": "v0.2",
+  "case_count": 16,
+  "title": "Atomic claims and evidentiary sufficiency",
+  "created_on": "2026-10-30",
+  "authorship": "AI-assisted development fixtures and rubrics, informed by the public v0.1 reviews.",
+  "independent_human_review": "not_performed",
+  "held_out": false,
+  "scope": "A focused 16-case development suite, not a full replacement of every v0.1 coverage area. The v0.1 suite remains available unchanged.",
+  "historical_preservation": "No old case, gold label, prompt or experimental result is rewritten. New case IDs and scoring version are explicit."
+}
