@@ -23,6 +23,12 @@ jobs:
         run: |
           python experiments/preservation-2026-10-30/verify.py
           python -O experiments/preservation-2026-10-30/verify.py
+      - name: Check action review and Rogue Agent under optimized Python
+        env:
+          PYTHONPATH: src
+        run: |
+          python -O -m unittest discover -s tests -p test_action_review.py -v
+          python -O -m unittest discover -s tests -p test_rogue_agent.py -v
       - name: Prepare paired experiment without inference
         env:
           PYTHONPATH: src
@@ -31,6 +37,10 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m receipts.runner --suite v0.2 --dry-run --output artifacts/dry-run-v02
+      - name: Prepare opt-in v0.3 suite without inference
+        env:
+          PYTHONPATH: src
+        run: python -m receipts.runner --suite v0.3 --dry-run --output artifacts/dry-run-v03
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: prepared-experiment
@@ -40,6 +50,11 @@ jobs:
         with:
           name: prepared-experiment-v02
           path: artifacts/dry-run-v02/
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: prepared-experiment-v03
+          path: artifacts/dry-run-v03/
           retention-days: 14
 
   rust-cli:

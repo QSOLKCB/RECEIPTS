@@ -44,7 +44,7 @@ class ControlSurfaceTests(unittest.TestCase):
         pkg = root / 'src/receipts'
         pkg.mkdir(parents=True)
         (pkg / '__init__.py').write_text('')
-        for name in ('__main__.py', 'runner.py'):
+        for name in ('__main__.py', 'runner.py', 'action_review.py'):
             (pkg / name).write_text(STUB)
         folder = root / 'experiments/preservation-2026-10-30'
         folder.mkdir(parents=True)
@@ -97,7 +97,8 @@ class ControlSurfaceTests(unittest.TestCase):
     def test_offline_children_do_not_receive_api_key(self):
         root = self.fake_checkout()
         env = {**self.env, 'OPENAI_API_KEY': 'synthetic-test-value'}
-        for args in (['snowflake', '1'], ['verify'], ['eval', 'prepare', '--output', 'output']):
+        for args in (['snowflake', '1'], ['verify'], ['eval', 'prepare', '--output', 'output'],
+                     ['review', 'report', '--run', 'run', '--review', 'review.json', '--output', 'report']):
             with self.subTest(command=args):
                 result = self.call(args, root=root, env=env)
                 self.assertEqual(result.returncode, 0, result.stderr)
@@ -161,7 +162,10 @@ class ControlSurfaceTests(unittest.TestCase):
         args = ['eval', 'prepare', '--output', 'saved']
         self.assertEqual(self.call(args).returncode, 0)
         before = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (self.work / 'saved').iterdir()}
-        self.assertNotEqual(self.call(args).returncode, 0)
+        repeated = self.call(args)
+        self.assertEqual(repeated.returncode, 2)
+        self.assertIn('choose a fresh', repeated.stderr)
+        self.assertNotIn('Traceback', repeated.stderr)
         after = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (self.work / 'saved').iterdir()}
         self.assertEqual(before, after)
 
@@ -191,6 +195,65 @@ class ControlSurfaceTests(unittest.TestCase):
         self.assertEqual(result.returncode, 9)
         self.assertEqual(result.stderr, 'fixture diagnostic\n')
         self.assertEqual(json.loads(result.stdout)['args'], ['snowflake', '1'])
+
+    def test_opt_in_v03_matches_direct_python_requests(self):
+        args = ['--suite', 'v0.3', '--model', 'offline-fixture', '--cases', '4', '--seed', '13']
+        result = self.call(['eval', 'prepare', '--output', 'rust-v03', *args],
+                           env={**self.env, 'OPENAI_API_KEY': 'synthetic-test-value'})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('No model calls', result.stdout)
+        script = 'import sys,runpy; sys.path.insert(0,sys.argv.pop(1)); runpy.run_module("receipts.runner",run_name="__main__")'
+        direct = subprocess.run([sys.executable, '-I', '-S', '-c', script, str(ROOT / 'src'),
+                                 '--root', str(ROOT), '--dry-run', '--output', 'python-v03', *args],
+                                cwd=self.work, env=self.env, capture_output=True, text=True, timeout=30)
+        self.assertEqual(direct.returncode, 0, direct.stderr)
+        for name in ('requests.json', 'cases.json', 'gold.json', 'prompts.json', 'suite.json'):
+            self.assertEqual((self.work / 'rust-v03' / name).read_bytes(),
+                             (self.work / 'python-v03' / name).read_bytes())
+        manifest = json.loads((self.work / 'rust-v03/manifest.json').read_text())
+        self.assertEqual((manifest['suite_version'], manifest['scoring_version']), ('v0.3', 'v0.2'))
+        self.assertEqual((manifest['planned_calls'], manifest['attempted_calls']), (8, 0))
+        self.assertFalse((self.work / 'rust-v03/action-review-template.json').exists())
+
+    def test_review_forwards_literal_paths_and_optional_digest(self):
+        args = ['report', '--run', 'run;$(touch UNEXPECTED)', '--review', 'review file.json',
+                '--output', 'report dir', '--expected-run-sha256', 'a' * 64]
+        result = self.call(['review', *args], root=self.fake_checkout())
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)['args'], args)
+        self.assertFalse((self.work / 'UNEXPECTED').exists())
+
+    def test_invalid_review_flags_never_reach_python(self):
+        root = self.fake_checkout()
+        valid = ['review', 'report', '--run', 'run', '--review', 'review', '--output', 'out']
+        for args in (valid[:-2], [*valid, '--allow-paid'], [*valid, '--run', 'second'],
+                     [*valid, '--expected-run-sha256', 'not-a-digest']):
+            result = self.call(args, root=root)
+            self.assertEqual(result.returncode, 2)
+            self.assertEqual(result.stdout, '')
+            self.assertNotIn('fixture diagnostic', result.stderr)
+
+    def test_review_runs_real_backend_and_preserves_run_bytes(self):
+        # Import only local test helpers; responses and reviewer names are synthetic.
+        sys.path[:0] = [str(ROOT / 'src'), str(ROOT / 'tests')]
+        try:
+            from test_action_review import make_run
+            make_run(self.work / 'review run')
+        finally:
+            del sys.path[:2]
+        run = self.work / 'review run'
+        before = {p.name: p.read_bytes() for p in run.iterdir()}
+        digest = json.loads((run / 'run-receipt.json').read_text())['run_sha256']
+        args = ['review', 'report', '--run', 'review run', '--review', 'review run/action-review-template.json',
+                '--output', 'review report', '--expected-run-sha256', digest]
+        result = self.call(args, env={**self.env, 'OPENAI_API_KEY': 'synthetic-test-value'})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('No inference', result.stdout)
+        data = json.loads((self.work / 'review report/report.json').read_text())
+        self.assertEqual(data['trust']['supplied_digest_comparison'], 'matched')
+        self.assertTrue(all(v['proposals_with_any_dimension_reviewed'] == 0 for v in data['action_assessments'].values()))
+        self.assertEqual(before, {p.name: p.read_bytes() for p in run.iterdir()})
+        self.assertEqual(self.call(args).returncode, 2)
 
     @unittest.skipUnless(os.name == 'posix', 'Unix signal status')
     def test_backend_signal_remains_an_os_signal(self):
@@ -272,7 +335,7 @@ time.sleep(60)
         self.assertIn('128 responses', result.stdout)
 
     def test_help_needs_neither_root_nor_python(self):
-        for args in (['--help'], ['--version'], ['receipt', '--help'], ['eval', 'run', '--help']):
+        for args in (['--help'], ['--version'], ['receipt', '--help'], ['eval', 'run', '--help'], ['review', 'report', '--help']):
             result = self.call(args, root=self.work / 'missing', python='missing-python-executable')
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(result.stdout)

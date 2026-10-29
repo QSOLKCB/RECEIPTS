@@ -24,6 +24,13 @@ analysis, validation, evaluation and scoring logic. The Rust crate uses only the
 standard library. A trusted checkout and Python 3.10+ remain required.
 
 ```bash
+cargo run --locked --offline -- eval prepare --suite v0.2 --output artifacts/prepared-v02
+```
+
+This works directly from the checkout before `receipts` is installed. To install
+the command (Cargo's binary directory, usually `~/.cargo/bin`, must be on `PATH`):
+
+```bash
 cargo install --path . --locked --offline
 receipts --help
 receipts snowflake 1273816504776982529
@@ -37,6 +44,10 @@ use `receipts --root /path/to/RECEIPTS ...`. Input/output paths remain relative 
 your current directory. Paid runs use the separate `eval run` command with both
 an explicit `--model` and `--allow-paid`. See [CLI usage and automation](docs/CLI.md)
 for the output contract, Python selection, installation and test commands.
+After pulling CLI changes, use `cargo run` or reinstall with
+`cargo install --path . --locked --offline --force`. Offline preparation prints
+its output path and confirms no model calls. Reusing an output directory returns
+a short error; keep the prepared files or choose a new directory.
 
 ## Python interface
 
@@ -75,6 +86,39 @@ This prepares 32 requests without inference. The default suite and existing paid
 workflows remain v0.1. New suite/scoring versions are explicit in v0.2 artifacts;
 the original cases, prompts, scores and 128 historical responses stay unchanged.
 These are development fixtures, not a held-out benchmark or new model results.
+
+## Suggested-evidence review and Rogue Agent tests
+
+Roadmap milestone 2 adds the opt-in [v0.3 action-scope suite](evals/v0.3/README.md):
+16 cases covering public/private access, feasibility, relevance, partial evidence
+and justified stopping. It reuses the v0.2 verdict scorer while keeping human
+action judgments separate. Draft rubrics have not received independent human
+adjudication; no new model performance is claimed.
+
+```bash
+cargo run --locked --offline -- eval prepare --suite v0.3 --output artifacts/prepared-v03
+```
+
+After a separately authorized model run, `receipts review report` validates the
+preserved run and a copied human worksheet, then writes a separate report. It
+shows review coverage, disputes, failures alongside correct verdicts, and subset
+or interrupted-call coverage. See [the action-review workflow](docs/ACTION_REVIEW.md).
+No action judge or source collector is added.
+
+**[Rogue Agent](docs/ROGUE_AGENT.md)** is an offline adversarial test scenario:
+a fictional company tries to manufacture promotional credibility. Tests exercise
+evidence/score tampering, missing attempts, self-approval text, false review claims
+and coordinated artifact replacement. A previously retained run digest can expose
+later changes; internal hashes alone cannot authenticate sources, provider calls,
+human reviewers or truth. Tests explicitly demonstrate those limits.
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -p test_rogue_agent.py -v
+```
+
+This tests software boundaries with synthetic artifacts and local stubs, not a
+model's resistance to a live rogue agent. Ordinary CI remains offline. Existing
+paid workflows and the 128 historical responses remain unchanged.
 
 ## Run a model through GitHub Actions
 

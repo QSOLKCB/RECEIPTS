@@ -18,12 +18,23 @@ cargo build --release --locked --offline
 ./target/release/receipts verify
 ```
 
+For a first offline experiment without installing the command:
+
+```bash
+cargo run --locked --offline -- eval prepare --suite v0.3 --output artifacts/prepared-v03
+```
+
 To install the command into Cargo's binary directory:
 
 ```bash
 cargo install --path . --locked --offline
 receipts --help
 ```
+
+Cargo's binary directory (normally `~/.cargo/bin`) must be on `PATH`. A repository
+clone alone does not install `receipts`. After pulling CLI changes, use
+`cargo install --path . --locked --offline --force` to refresh the installed binary,
+or use `cargo run --locked --offline -- ...` directly from the checkout.
 
 Installation copies the binary, not the Python package, fixtures or archives.
 Keep the repository checkout available. From its root, the CLI uses that checkout.
@@ -50,6 +61,7 @@ yet received the same integration validation. No shell completion or TUI is incl
 | `verify` | Preservation verifier | Text verification result for the fixed four-model checkpoint |
 | `eval prepare --output DIR` | `receipts.runner --dry-run` | JSON request/input/manifest artifacts; no inference |
 | `eval run --model ID --output DIR --allow-paid` | `receipts.runner` | Paid inference when authorized and credentials are configured |
+| `review report --run DIR --review FILE --output DIR` | `receipts.action_review` | Offline v0.3 consistency checks and aggregation of declared human action judgments |
 
 Examples from the checkout root:
 
@@ -88,8 +100,8 @@ budget. Duplicate or unknown evaluation options are rejected before Python start
 Pass flags and values as separate arguments; `--option=value` is not supported
 by the Rust global/evaluation parser.
 
-`--suite v0.1|v0.2` selects an allowlisted suite; the default remains `v0.1`.
-Both contain 16 cases, so existing call limits apply. For the new atomic-claim
+`--suite v0.1|v0.2|v0.3` selects an allowlisted suite; the default remains `v0.1`.
+All contain 16 cases, so existing call limits apply. For the atomic-claim
 development suite, prepare offline with:
 
 ```bash
@@ -97,14 +109,16 @@ receipts eval prepare --suite v0.2 --output artifacts/prepared-v02
 ```
 
 The [v0.2 contract](../evals/v0.2/README.md) documents its typed claims, distinct
-scoring fields and pending human review. Selecting it does not enable paid mode.
+scoring fields and pending human review. [v0.3](../evals/v0.3/README.md) adds action
+rubrics and review artifacts while reusing the v0.2 verdict scorer. Selecting a
+suite does not enable paid mode.
 
 The runner shuffles the suite before taking `--cases`, then shuffles the paired
 calls. Changing the seed can therefore change which cases a reduced run covers,
 as well as their call order. It does not seed model sampling or make responses
 deterministic. The v0.1 manifest key `seed_for_order_only` is retained for format
-compatibility; v0.2 uses `seed_for_case_selection_and_call_order`. Inspect
-`selected_case_ids` and `call_order` for actual coverage and sequence in either version.
+compatibility; v0.2/v0.3 use `seed_for_case_selection_and_call_order`. Inspect
+`selected_case_ids` and `call_order` for actual coverage and sequence in every version.
 
 For an explicitly authorized run, with `OPENAI_API_KEY` already supplied through
 the environment or secret mechanism:
@@ -116,7 +130,24 @@ receipts eval run --model YOUR_EXACT_MODEL_ID \
 
 Never put a key in an argument. Missing credentials produce the Python runner's
 existing blocked manifest and zero model calls. Existing output directories are
-never overwritten. The runner's stopping and retry policies are unchanged.
+never overwritten: a repeated run returns 2 with a concise fresh-directory
+message. Successful preparation prints its output path and confirms no model
+calls were made. The runner's stopping and retry policies are unchanged.
+
+## Offline action-review reports
+
+`review report` requires one each of `--run`, `--review` and `--output`. It optionally
+accepts `--expected-run-sha256` with 64 lowercase hex characters from a previously
+retained `run-receipt.json`. Duplicate, unknown or incomplete flags are rejected
+before Python starts. The provider key is removed from its environment.
+
+The report validates a terminal v0.3 run and a record-bound review worksheet,
+replays saved scores and summaries, and writes `review.json`, `report.json` and
+`report.md` in a fresh directory outside the run. It never judges recommendations
+automatically or collects their suggested evidence. Success returns 0 and a short
+text message; validation/access/output errors return 2 without echoing untrusted
+input text. See [the full review contract](ACTION_REVIEW.md), including required
+ratings and the limits of unauthenticated reviewer declarations and run digests.
 
 ## Automation contract
 

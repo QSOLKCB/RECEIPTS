@@ -8,7 +8,8 @@ the failure would violate the preservation rules.
 The enforcement descriptions below distinguish executable checks from researcher
 responsibilities. A prompt can express a requirement without enforcing it. The
 current implementation is a bounded evidence-packet prototype with the original
-v0.1 contract and an explicitly selected v0.2 development suite/scorer.
+v0.1 contract, an explicitly selected v0.2 development suite/scorer and an opt-in
+v0.3 action-scope suite with separate human review.
 
 ## Evidence and interpretation
 
@@ -274,6 +275,38 @@ denominator, and offline replay of all 128 historical request hashes, scores and
 summaries. Review worksheets bind to canonical result hashes and are saved as
 dated copies; no automated prose judge or human adjudication is implied. Rubric
 validity remains a review task, and current labels are not independently reviewed.
+
+### INV-21 — Action review remains separate and attributable
+
+Suggested evidence must be public, feasible and relevant to the exact proposition;
+state when it could only provide partial information. Justified stopping is a
+positive control. A correct verdict does not excuse a bad next step. Keep action
+dimensions, potential evidence effect, rubric disputes and review coverage separate.
+Do not turn absent, invalid, unreviewed or unresolved observations into passes.
+
+**Enforcement:** v0.3 provides draft case-specific rubrics and an offline,
+record-bound review/report contract. Every attempted row remains present;
+non-pending judgments require declared human attribution, UTC time and notes.
+These are unauthenticated attestations, not verified human identity or independence.
+No keyword classifier, model judge, collector or combined approval score exists.
+Rubrics still require substantive human review; reports expose that limitation.
+
+### INV-22 — Consistency is not authentication or abuse prevention
+
+A rogue submitter can rewrite data and hashes together, invent reviewer names,
+omit whole runs, fork the checker or publish misleading promotional copy. A
+successful check must describe exactly what was checked and leave source truth,
+provider-call authenticity and reviewer identity unestablished where appropriate.
+Do not emit a trust badge or imply immunity to malicious use.
+
+**Enforcement:** the v0.3 report replays requests, strict JSON parsing, scores,
+summaries, counts and seeded selection/order. It rejects inconsistent/omitted rows
+and keeps subset and unattempted coverage visible. An optional retained canonical
+run digest detects replacement relative to the supplied value; its origin is not
+authenticated. Reports and the offline Rogue Agent tests explicitly distinguish
+detected changes from internally consistent forgery. No signature or external
+identity/provider attestation is implemented. Independent reference retention,
+experiment preregistration and substantive review remain researcher responsibilities.
 
 ## Verification and changes
 
