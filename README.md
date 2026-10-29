@@ -17,7 +17,28 @@ runner. It does not autonomously crawl the web, authenticate a source, identify
 people, or certify that a claim is true. Researchers acquire and check public
 sources before the model receives a bounded evidence packet.
 
-## Start locally
+## Rust CLI control surface
+
+Rust provides one `receipts` command for humans and agents; Python retains the
+analysis, validation, evaluation and scoring logic. The Rust crate uses only the
+standard library. A trusted checkout and Python 3.10+ remain required.
+
+```bash
+cargo install --path . --locked --offline
+receipts --help
+receipts snowflake 1273816504776982529
+receipts verify
+receipts eval prepare --output artifacts/prepared-cli
+```
+
+The tested Rust toolchain is pinned in `rust-toolchain.toml`; installing it may
+require a download before Cargo can build offline. From outside the checkout,
+use `receipts --root /path/to/RECEIPTS ...`. Input/output paths remain relative to
+your current directory. Paid runs use the separate `eval run` command with both
+an explicit `--model` and `--allow-paid`. See [CLI usage and automation](docs/CLI.md)
+for the output contract, Python selection, installation and test commands.
+
+## Python interface
 
 Python 3.10 or later; the runtime and tests use only the standard library.
 Run from the repository root:

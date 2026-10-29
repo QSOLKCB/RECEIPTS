@@ -228,6 +228,24 @@ development run into a general model ranking or a reliable improvement claim.
 its documented byte/consistency checks. Token-cost estimates are not reconciled
 bills, and provider token counters do not independently reveal internal compute.
 
+### INV-19 — Rust controls invocation; Python owns evidence semantics
+
+The Rust CLI selects known operations and validates its evaluation controls.
+Python remains the single implementation of evidence calculations, canonical
+hashing, request construction, scoring and artifact formats. Do not port or subtly
+reinterpret those operations as part of control-surface work.
+
+Metadata JSON and backend failure status must pass through unchanged. Preserve
+argument boundaries and caller-relative input/output paths. The selected checkout
+and Python interpreter are trusted dependencies, not authenticated by the launcher.
+
+**Enforcement:** the Rust CLI uses separate process arguments and Python isolated
+startup with an explicit checkout source path. Offline child processes lose
+`OPENAI_API_KEY`; paid mode requires both an explicit model and `--allow-paid`.
+Unit and integration tests cover output/request parity, paths, failures, secret
+forwarding and paid-mode gating without provider calls. The CLI is not a sandbox,
+and its paid-intent flag is not independent proof of user authorization.
+
 ## Verification and changes
 
 Follow the commands and workflow in [AGENTS.md](AGENTS.md). At minimum, code and
