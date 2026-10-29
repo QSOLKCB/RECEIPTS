@@ -99,6 +99,26 @@ hashes alone cannot prevent malicious rewriting or selective publication.
 
 ## 3. Freeze harder cases and repeat comparisons
 
+**Engineering implemented; research acceptance pending:** the opt-in
+[v0.4 development suite](evals/v0.4/README.md) adds 16 more complex evidence cases,
+including conflict resolution, selection bias, account transfer, positive editorial
+direction, settlement and bounded absence. Difficulty has not been measured and
+independent case authorship/adjudication has not occurred.
+
+The [offline experiment workflow](docs/EXPERIMENTS.md) freezes inputs, both prompts,
+rubrics, runtime source/Python version, notes and a bounded schedule of full-suite
+repeats. It checks submitted runs against a caller-retained plan digest and exposes
+all planned slots, strict paired differences, missing-outcome bounds, observed
+failures, repeat dispersion and provider-ID comparability warnings. Notes retain
+selection and cost decisions without authenticating them or authorizing spending.
+
+No new paid observations, held-out status, external preregistration, independent
+review or currency cap is claimed. Independent review, an approved costed live-run
+plan and actual repeated observations remain outstanding. The engineering does
+not finish those acceptance criteria or the live Rogue Agent experiment.
+
+The milestone's design and acceptance criteria are retained below:
+
 Seek independently authored and adjudicated cases before calling a suite held out.
 Include conflicting primary records, source copying, source-selection bias,
 account transfers, calibrated metadata limitations, positive coordination evidence,

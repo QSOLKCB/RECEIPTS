@@ -120,6 +120,31 @@ This tests software boundaries with synthetic artifacts and local stubs, not a
 model's resistance to a live rogue agent. Ordinary CI remains offline. Existing
 paid workflows and the 128 historical responses remain unchanged.
 
+## Freeze a repeated comparison offline
+
+Roadmap milestone 3 adds [v0.4](evals/v0.4/README.md): 16 new cases covering
+conflicting/corrected records, source selection, account transfers and positive
+evidence. Its draft labels are AI-assisted and not independently adjudicated.
+The [repeat-plan workflow](docs/EXPERIMENTS.md) locks all cases, prompts, rubrics,
+model, token cap, Python source/version and a schedule of 2–5 repeats.
+
+```bash
+cargo run --locked --offline -- experiment prepare \
+  --model offline-placeholder --repeats 3 \
+  --notes examples/repeat-design.md --output artifacts/repeat-plan
+```
+
+This prepares 96 requests without inference. The example records that pricing,
+authorization and independent review are outstanding. Retain its plan digest
+independently; hashes and local UTC times are not authenticated preregistration.
+
+After separately authorized runs, `receipts experiment report` checks every
+planned slot and writes a comparison with paired case/repeat outcomes, explicit
+missing-call bounds, invalid/error accounting and descriptive repeat variability.
+Missing calls remain unknown, and no overall paired mean is reported until all
+planned pairs are observed. These bounds are not population confidence intervals.
+Neither experiment command makes model calls or establishes a currency cap.
+
 ## Run a model through GitHub Actions
 
 1. Add an `OPENAI_API_KEY` repository secret in **Settings → Secrets and variables

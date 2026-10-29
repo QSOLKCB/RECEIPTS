@@ -161,14 +161,16 @@ def strict_json(text):
 
 
 def load_run(directory):
-    from . import evaluation_v3 as evaluator
+    from . import evaluation_v3, evaluation_v4
     values = {name: strict_json((directory / (name + ".json")).read_text(encoding="utf-8"))
               for name in ("manifest", "cases", "gold", "suite", "prompts", "summary")}
     manifest, cases, gold = values["manifest"], values["cases"], values["gold"]
-    require(isinstance(manifest, dict) and manifest.get("format") == "receipts-eval-v0.3", "Expected a v0.3 run")
+    require(isinstance(manifest, dict) and manifest.get("suite_version") in ("v0.3", "v0.4"), "Expected a v0.3 or v0.4 run")
+    require(manifest.get("format") == "receipts-eval-" + manifest["suite_version"], "Run format/suite mismatch")
+    evaluator = {"v0.3": evaluation_v3, "v0.4": evaluation_v4}[manifest["suite_version"]]
     require(manifest.get("status") in ("completed", "completed_with_errors") and manifest.get("dry_run") is False,
             "Only terminal inference records can be reviewed; preserve partial runs separately")
-    require(manifest.get("suite_version") == "v0.3" and manifest.get("scoring_version") == "v0.2", "Unexpected suite/scorer version")
+    require(manifest.get("scoring_version") == "v0.2", "Unexpected scorer version")
     require(nonempty(manifest.get("model_requested")) and type(manifest.get("max_output_tokens_per_call")) is int
             and 256 <= manifest["max_output_tokens_per_call"] <= 2048, "Invalid model/token configuration")
     require(all(type(manifest.get(k)) is int for k in ("planned_calls", "attempted_calls", "completed_calls")), "Run counts must be integers")

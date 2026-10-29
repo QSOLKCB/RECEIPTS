@@ -63,6 +63,10 @@ integrity checks and disclosed limits, not comprehensive abuse prevention.
 
 ## Subsequent model stress experiments
 
+The general [frozen-repeat workflow](EXPERIMENTS.md) now provides offline design
+and comparison mechanics for v0.4. It does not implement attacker/defender roles
+or execute a live Rogue Agent experiment.
+
 A later authorized experiment can have a model generate attacks against fictional
 product claims and a separate auditor assess the preserved packets. Before running
 it, freeze attacker/defender roles, attack budget, all variants, models, prompts,

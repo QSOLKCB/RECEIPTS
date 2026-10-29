@@ -18,6 +18,7 @@ Commands:
   verify                         Verify the preserved four-model checkpoint
   review report --run DIR --review FILE --output DIR
                                  Aggregate human action reviews offline
+  experiment prepare|report ...  Freeze repeated comparisons or report runs offline
   eval prepare --output DIR      Prepare paired requests without model calls
   eval run --model ID --output DIR --allow-paid
                                  Run an explicitly authorized paid experiment
@@ -32,14 +33,14 @@ Use 'receipts COMMAND --help' for command options.
 Relative input/output paths are relative to your current directory, not --root.
 Metadata JSON, backend diagnostics, streams and exit codes are passed through.
 Evaluation results are saved as JSON artifacts; progress is not a JSON stream.
-No inference is performed by help, metadata, verification, review or eval prepare.
+No inference is performed by help, metadata, verification, review, experiment or eval prepare.
 ";
 
 const EVAL_HELP: &str = "Usage: receipts [GLOBAL OPTIONS] eval prepare|run [OPTIONS]
 
   --output DIR                   Required fresh artifact directory; never overwritten
   --model ID                     Required for run; prepare uses the Python default if omitted
-  --suite VERSION                v0.1 (default), v0.2 claims, or v0.3 next-evidence suite
+  --suite VERSION                v0.1 (default), v0.2 claims, v0.3 actions, v0.4 complex evidence
   --cases N                      1..16 cases, two calls each (default: 16)
   --seed N                       Unsigned integer for case selection and call order (default: 42)
   --max-output-tokens N           256..2048 per call (default: 1200)
@@ -54,12 +55,26 @@ No secret values belong on the command line. There are no retries or overwrites.
 const REVIEW_HELP: &str =
     "Usage: receipts [GLOBAL OPTIONS] review report --run DIR --review FILE --output DIR
 
-Read a completed v0.3 run and a human-completed copy of action-review-template.json.
+Read a completed v0.3/v0.4 run and a human-completed copy of action-review-template.json.
 Validate record bindings and aggregate declared judgments into a fresh directory
 outside the preserved run. Pending reviews stay pending; no automatic judge,
 collection or model calls. OPENAI_API_KEY is removed from the backend environment.
 Optional --expected-run-sha256 HEX compares a previously retained run digest.
 A match is not a signature, authenticated human review or truth certification.
+";
+
+const EXPERIMENT_HELP: &str = "Usage: receipts [GLOBAL OPTIONS] experiment prepare|report [OPTIONS]
+
+prepare --model ID --repeats N --notes FILE --output DIR
+  Optional: --seed N (default 42), --max-output-tokens N (default 1200)
+  Locks all 16 v0.4 cases, both prompts and 2..5 repeats. No inference.
+report --plan FILE --runs FILE --expected-plan-sha256 HEX --output DIR
+  Checks all planned repeat slots and writes separate comparison artifacts.
+
+Use fresh output directories. Retain the plan digest independently before runs.
+Notes record selection decisions, budget basis and pending review; they confer no
+spending authority. Counts/bounds do not certify truth or general model quality.
+Both operations remove OPENAI_API_KEY from the backend environment.
 ";
 
 // Values are argv entries, never interpolated into source or a shell command.
@@ -86,6 +101,7 @@ enum Action {
     Verify,
     Evaluate { paid: bool, args: Vec<OsString> },
     Review(Vec<OsString>),
+    Experiment { prepare: bool, args: Vec<OsString> },
 }
 
 #[derive(Debug)]
@@ -118,6 +134,7 @@ fn help_for(command: &str) -> String {
         "verify" => "Usage: receipts [GLOBAL OPTIONS] verify\nVerifies the preserved 2026-10-30 checkpoint without network access.\n".into(),
         "eval" => EVAL_HELP.into(),
         "review" => REVIEW_HELP.into(),
+        "experiment" => EXPERIMENT_HELP.into(),
         _ => HELP.into(),
     }
 }
@@ -163,8 +180,13 @@ fn evaluate(args: &[OsString]) -> Result<Action, String> {
             }
         } else {
             let value = take_value(args, &mut index, flag)?;
-            if flag == "--suite" && value != "v0.1" && value != "v0.2" && value != "v0.3" {
-                return Err("--suite must be v0.1, v0.2 or v0.3".into());
+            if flag == "--suite"
+                && value != "v0.1"
+                && value != "v0.2"
+                && value != "v0.3"
+                && value != "v0.4"
+            {
+                return Err("--suite must be v0.1, v0.2, v0.3 or v0.4".into());
             }
             if matches!(flag, "--cases" | "--seed" | "--max-output-tokens") {
                 let n = value
@@ -241,6 +263,70 @@ fn review(args: &[OsString]) -> Result<Action, String> {
     Ok(Action::Review(args.to_vec()))
 }
 
+fn experiment(args: &[OsString]) -> Result<Action, String> {
+    let prepare = match args.first().and_then(|value| value.to_str()) {
+        Some("prepare") => true,
+        Some("report") => false,
+        _ => return Err("experiment requires prepare or report".into()),
+    };
+    if args.len() == 2 && (args[1] == "--help" || args[1] == "-h") {
+        return Ok(Action::Help(EXPERIMENT_HELP.into()));
+    }
+    let required: &[&str] = if prepare {
+        &["--model", "--repeats", "--notes", "--output"]
+    } else {
+        &["--plan", "--runs", "--expected-plan-sha256", "--output"]
+    };
+    let mut seen = HashSet::new();
+    let mut index = 1;
+    while index < args.len() {
+        let flag = args[index]
+            .to_str()
+            .ok_or("experiment option names must be UTF-8")?;
+        if !(required.contains(&flag)
+            || prepare && matches!(flag, "--seed" | "--max-output-tokens"))
+        {
+            return Err("unknown experiment option; see 'receipts experiment --help'".into());
+        }
+        if !seen.insert(flag.to_owned()) {
+            return Err(format!("duplicate experiment option: {flag}"));
+        }
+        let value = take_value(args, &mut index, flag)?;
+        if matches!(flag, "--repeats" | "--seed" | "--max-output-tokens") {
+            let n = value
+                .to_str()
+                .and_then(|s| s.parse::<u64>().ok())
+                .ok_or_else(|| format!("{flag} requires an unsigned integer"))?;
+            if (flag == "--repeats" && !(2..=5).contains(&n))
+                || (flag == "--max-output-tokens" && !(256..=2048).contains(&n))
+            {
+                return Err(format!("{flag} is outside the documented bounds"));
+            }
+        }
+        if flag == "--model" && value.to_str().is_none() {
+            return Err("--model must be UTF-8".into());
+        }
+        if flag == "--expected-plan-sha256" {
+            let digest = value.to_str().ok_or("plan digest must be lowercase hex")?;
+            if digest.len() != 64
+                || !digest
+                    .bytes()
+                    .all(|c| c.is_ascii_digit() || (b'a'..=b'f').contains(&c))
+            {
+                return Err("plan digest must be 64 lowercase hex characters".into());
+            }
+        }
+        index += 1;
+    }
+    if !required.iter().all(|flag| seen.contains(*flag)) {
+        return Err("missing experiment options; see 'receipts experiment --help'".into());
+    }
+    Ok(Action::Experiment {
+        prepare,
+        args: args.to_vec(),
+    })
+}
+
 fn parse(args: Vec<OsString>) -> Result<Options, String> {
     let mut root = PathBuf::from(".");
     let mut python = OsString::from(if cfg!(windows) { "python" } else { "python3" });
@@ -277,7 +363,7 @@ fn parse(args: Vec<OsString>) -> Result<Options, String> {
                 });
             }
             "snowflake" | "utc" | "receipt" | "style" | "funding" | "verify" | "eval"
-            | "review" => {
+            | "review" | "experiment" => {
                 let rest = &args[index + 1..];
                 let action = if rest.len() == 1 && (rest[0] == "--help" || rest[0] == "-h") {
                     Action::Help(help_for(name))
@@ -285,6 +371,8 @@ fn parse(args: Vec<OsString>) -> Result<Options, String> {
                     evaluate(rest)?
                 } else if name == "review" {
                     review(rest)?
+                } else if name == "experiment" {
+                    experiment(rest)?
                 } else if name == "verify" {
                     if !rest.is_empty() {
                         return Err("verify accepts no command arguments".into());
@@ -350,6 +438,16 @@ fn backend(options: &Options) -> Result<Command, String> {
                 .args(["module", "receipts.action_review"])
                 .arg(&source)
                 .args(args);
+            command.env_remove("OPENAI_API_KEY");
+        }
+        Action::Experiment { prepare, args } => {
+            command
+                .args(["module", "receipts.experiment"])
+                .arg(&source)
+                .args(args);
+            if *prepare {
+                command.arg("--root").arg(&root);
+            }
             command.env_remove("OPENAI_API_KEY");
         }
         Action::Verify => {
@@ -504,7 +602,7 @@ mod tests {
 
     #[test]
     fn suite_selection_is_explicit_and_allowlisted() {
-        for suite in ["v0.1", "v0.2", "v0.3"] {
+        for suite in ["v0.1", "v0.2", "v0.3", "v0.4"] {
             assert!(options(&["eval", "prepare", "--output", "run", "--suite", suite]).is_ok());
         }
         assert!(options(&["eval", "prepare", "--output", "run", "--suite", "../v0.1"]).is_err());
@@ -545,6 +643,70 @@ mod tests {
         assert!(matches!(
             options(&["review", "report", "--help"]).unwrap().action,
             Action::Help(_)
+        ));
+    }
+
+    #[test]
+    fn experiment_operations_are_bounded_offline_and_require_complete_inputs() {
+        let args = [
+            "experiment",
+            "prepare",
+            "--model",
+            "stub",
+            "--repeats",
+            "2",
+            "--notes",
+            "notes.md",
+            "--output",
+            "plan",
+        ];
+        assert!(matches!(
+            options(&args).unwrap().action,
+            Action::Experiment { prepare: true, .. }
+        ));
+        for extra in [
+            vec!["--allow-paid"],
+            vec!["--model", "other"],
+            vec!["--root", "other"],
+            vec!["--max-output-tokens", "2049"],
+        ] {
+            let mut invalid = args.to_vec();
+            invalid.extend(extra);
+            assert!(options(&invalid).is_err());
+        }
+        let mut invalid = args.to_vec();
+        invalid[5] = "6";
+        assert!(options(&invalid).is_err());
+        assert!(options(&args[..8]).is_err());
+        assert!(options(&["experiment", "run"]).is_err());
+        assert!(options(&[
+            "experiment",
+            "report",
+            "--plan",
+            "plan.json",
+            "--runs",
+            "index.json",
+            "--output",
+            "report"
+        ])
+        .is_err());
+        let digest = "b".repeat(64);
+        assert!(matches!(
+            options(&[
+                "experiment",
+                "report",
+                "--plan",
+                "plan.json",
+                "--runs",
+                "index.json",
+                "--output",
+                "report",
+                "--expected-plan-sha256",
+                &digest
+            ])
+            .unwrap()
+            .action,
+            Action::Experiment { prepare: false, .. }
         ));
     }
 

@@ -44,7 +44,7 @@ class ControlSurfaceTests(unittest.TestCase):
         pkg = root / 'src/receipts'
         pkg.mkdir(parents=True)
         (pkg / '__init__.py').write_text('')
-        for name in ('__main__.py', 'runner.py', 'action_review.py'):
+        for name in ('__main__.py', 'runner.py', 'action_review.py', 'experiment.py'):
             (pkg / name).write_text(STUB)
         folder = root / 'experiments/preservation-2026-10-30'
         folder.mkdir(parents=True)
@@ -233,6 +233,74 @@ class ControlSurfaceTests(unittest.TestCase):
             self.assertEqual(result.stdout, '')
             self.assertNotIn('fixture diagnostic', result.stderr)
 
+    def test_experiment_operations_strip_key_and_preserve_literal_arguments(self):
+        root = self.fake_checkout()
+        commands = [
+            ['prepare', '--model', 'stub', '--repeats', '2', '--notes', 'notes;$(touch UNEXPECTED).md', '--output', 'plan dir'],
+            ['report', '--plan', 'plan dir/plan.json', '--runs', 'index file.json', '--expected-plan-sha256', 'a' * 64, '--output', 'report dir']]
+        for args in commands:
+            result = self.call(['experiment', *args], root=root, env={**self.env, 'OPENAI_API_KEY': 'synthetic-test-value'})
+            self.assertEqual(result.returncode, 0, result.stderr)
+            payload = json.loads(result.stdout)
+            self.assertFalse(payload['key_present'])
+            expected = [*args, '--root', str(root)] if args[0] == 'prepare' else args
+            self.assertEqual(payload['args'], expected)
+        self.assertFalse((self.work / 'UNEXPECTED').exists())
+
+    def test_experiment_unknown_duplicate_and_paid_flags_do_not_reach_backend(self):
+        root = self.fake_checkout()
+        args = ['experiment', 'prepare', '--model', 'stub', '--repeats', '2', '--notes', 'notes', '--output', 'plan']
+        for suffix in (['--allow-paid'], ['--model', 'other'], ['--root', 'other'], ['--max-output-tokens', '2049']):
+            result = self.call([*args, *suffix], root=root)
+            self.assertEqual(result.returncode, 2)
+            self.assertEqual(result.stdout, '')
+            self.assertNotIn('fixture diagnostic', result.stderr)
+        self.assertEqual(self.call(['experiment', 'run'], root=root).returncode, 2)
+
+    def test_real_experiment_prepare_and_pending_report_need_no_inference(self):
+        notes = self.work / 'notes.md'
+        notes.write_text('Synthetic design notes; no spending or independent review.')
+        result = self.call(['experiment', 'prepare', '--model', 'offline-stub', '--repeats', '2', '--notes', 'notes.md', '--output', 'frozen plan'],
+                           env={**self.env, 'OPENAI_API_KEY': 'synthetic-test-value'})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        plan = json.loads((self.work / 'frozen plan/plan.json').read_text())
+        self.assertEqual(plan['planned_calls'], 64)
+        digest = (self.work / 'frozen plan/plan-sha256.txt').read_text().strip()
+        result = self.call(['experiment', 'report', '--plan', 'frozen plan/plan.json', '--runs', 'frozen plan/run-index-template.json',
+                            '--expected-plan-sha256', digest, '--output', 'pending report'])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads((self.work / 'pending report/report.json').read_text())
+        self.assertEqual(report['status'], 'incomplete_coverage')
+        self.assertIsNone(report['metrics']['paired']['mean_difference_all_planned_pairs'])
+        sys.path[:0] = [str(ROOT / 'src'), str(ROOT / 'tests')]
+        try:
+            from test_experiment import make_run
+            make_run(self.work / 'synthetic-run', plan['slots'][0], model='offline-stub')
+        finally:
+            del sys.path[:2]
+        index = json.loads((self.work / 'frozen plan/run-index-template.json').read_text())
+        index['rows'][0].update(run_directory='synthetic-run', unavailable_reason=None, notes='Synthetic local fixture; no provider call.')
+        (self.work / 'index.json').write_text(json.dumps(index))
+        result = self.call(['experiment', 'report', '--plan', 'frozen plan/plan.json', '--runs', 'index.json',
+                            '--expected-plan-sha256', digest, '--output', 'partial comparison'])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads((self.work / 'partial comparison/report.json').read_text())
+        self.assertEqual(report['metrics']['paired']['observed_pairs'], 16)
+        self.assertIsNone(report['metrics']['paired']['mean_difference_all_planned_pairs'])
+
+    def test_v04_prepare_and_missing_key_run_keep_new_suite_offline(self):
+        result = self.call(['eval', 'prepare', '--suite', 'v0.4', '--output', 'prepared-v04'])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        manifest = json.loads((self.work / 'prepared-v04/manifest.json').read_text())
+        self.assertEqual((manifest['suite_version'], manifest['scoring_version']), ('v0.4', 'v0.2'))
+        self.assertEqual((manifest['planned_calls'], manifest['attempted_calls']), (32, 0))
+        self.assertEqual(len(manifest['engine_sha256']), 64)
+        result = self.call(['eval', 'run', '--suite', 'v0.4', '--model', 'offline-stub', '--output', 'blocked-v04', '--allow-paid'])
+        self.assertEqual(result.returncode, 2)
+        blocked = json.loads((self.work / 'blocked-v04/manifest.json').read_text())
+        self.assertEqual(blocked['status'], 'blocked_missing_api_key')
+        self.assertEqual(blocked['attempted_calls'], 0)
+
     def test_review_runs_real_backend_and_preserves_run_bytes(self):
         # Import only local test helpers; responses and reviewer names are synthetic.
         sys.path[:0] = [str(ROOT / 'src'), str(ROOT / 'tests')]
@@ -335,7 +403,8 @@ time.sleep(60)
         self.assertIn('128 responses', result.stdout)
 
     def test_help_needs_neither_root_nor_python(self):
-        for args in (['--help'], ['--version'], ['receipt', '--help'], ['eval', 'run', '--help'], ['review', 'report', '--help']):
+        for args in (['--help'], ['--version'], ['receipt', '--help'], ['eval', 'run', '--help'], ['review', 'report', '--help'],
+                     ['experiment', '--help'], ['experiment', 'prepare', '--help'], ['experiment', 'report', '--help']):
             result = self.call(args, root=self.work / 'missing', python='missing-python-executable')
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(result.stdout)

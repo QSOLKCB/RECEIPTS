@@ -29,6 +29,7 @@ jobs:
         run: |
           python -O -m unittest discover -s tests -p test_action_review.py -v
           python -O -m unittest discover -s tests -p test_rogue_agent.py -v
+          python -O -m unittest discover -s tests -p test_experiment.py -v
       - name: Prepare paired experiment without inference
         env:
           PYTHONPATH: src
@@ -41,6 +42,12 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m receipts.runner --suite v0.3 --dry-run --output artifacts/dry-run-v03
+      - name: Prepare v0.4 and freeze a repeated design without inference
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m receipts.runner --suite v0.4 --dry-run --output artifacts/dry-run-v04
+          python -m receipts.experiment prepare --model offline-placeholder --repeats 2 --notes examples/repeat-design.md --output artifacts/repeat-plan
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: prepared-experiment
@@ -55,6 +62,13 @@ jobs:
         with:
           name: prepared-experiment-v03
           path: artifacts/dry-run-v03/
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: prepared-v04-and-repeat-plan
+          path: |
+            artifacts/dry-run-v04/
+            artifacts/repeat-plan/
           retention-days: 14
 
   rust-cli:

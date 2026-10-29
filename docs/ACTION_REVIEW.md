@@ -20,9 +20,12 @@ pulling CLI changes, reinstall with `--force` or use `cargo run`.
 
 Preparation creates requests, not responses to review. Only a separately
 authorized model run creates actual response artifacts. The report command accepts
-terminal v0.3 runs (`completed` or `completed_with_errors`), including an early
+terminal v0.3/v0.4 runs (`completed` or `completed_with_errors`), including an early
 stop on API error. Prepared, blocked and interrupted runs cannot be treated as
-completed evaluations. Older run formats are not migrated or reinterpreted.
+completed evaluations. v0.4 also uses this same v0.3 action-review schema; its suite
+version is explicit in the bound manifest. Older run formats are not migrated or
+reinterpreted. [Repeated-comparison reports](EXPERIMENTS.md) do not aggregate or
+replace these substantive action judgments.
 
 Before review, retain the run artifacts and the `run_sha256` from
 `run-receipt.json` somewhere the submitter cannot rewrite. Record the planned
