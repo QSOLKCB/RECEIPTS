@@ -173,10 +173,68 @@ class ControlSurfaceTests(unittest.TestCase):
         self.assertEqual(json.loads(result.stdout)['args'], ['snowflake', '1'])
 
     @unittest.skipUnless(os.name == 'posix', 'Unix signal status')
-    def test_child_signal_is_reported_as_failure(self):
+    def test_backend_signal_remains_an_os_signal(self):
         result = self.call(['snowflake', '1'], root=self.fake_checkout(),
                            env={**self.env, 'RECEIPTS_TEST_SIGNAL': 'yes'})
-        self.assertEqual(result.returncode, 128 + signal.SIGTERM)
+        self.assertEqual(result.returncode, -signal.SIGTERM)
+
+    def waiting_paid_stub(self):
+        root = self.fake_checkout()
+        (root / 'src/receipts/runner.py').write_text('''import json, os, time
+print(json.dumps({"pid": os.getpid(), "group": os.getpgrp()}), flush=True)
+time.sleep(60)
+''')
+        return [str(BINARY), '--root', str(root), '--python', sys.executable,
+                'eval', 'run', '--model', 'local-stub', '--output', 'unused', '--allow-paid']
+
+    @staticmethod
+    def stop_test_group(group):
+        # Isolated test groups also clean up a child left by the old launcher.
+        try:
+            os.killpg(group, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+
+    @unittest.skipUnless(os.name == 'posix', 'Unix process replacement')
+    def test_killing_only_cli_pid_stops_paid_backend(self):
+        import selectors
+        command = self.waiting_paid_stub()
+        for sig in (signal.SIGTERM, signal.SIGKILL):
+            with self.subTest(signal=sig):
+                with subprocess.Popen(command, cwd=self.work, env=self.env,
+                                      stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                      stderr=subprocess.PIPE, text=True,
+                                      start_new_session=True) as process:
+                    try:
+                        with selectors.DefaultSelector() as ready:
+                            ready.register(process.stdout, selectors.EVENT_READ)
+                            self.assertTrue(ready.select(timeout=5), 'stub did not start')
+                        payload = json.loads(process.stdout.readline())
+                        process.send_signal(sig)  # Only this PID, not the process group.
+                        self.assertEqual(process.wait(timeout=5), -sig)
+                        with self.assertRaises(ProcessLookupError):
+                            os.kill(payload['pid'], 0)
+                        self.assertEqual(payload['pid'], process.pid)
+                    finally:
+                        self.stop_test_group(process.pid)
+                        process.communicate(timeout=5)
+
+    @unittest.skipUnless(os.name == 'posix', 'Unix caller timeout')
+    def test_subprocess_run_timeout_leaves_no_paid_backend(self):
+        command = self.waiting_paid_stub()
+        payload = None
+        try:
+            with self.assertRaises(subprocess.TimeoutExpired) as caught:
+                subprocess.run(command, cwd=self.work, env=self.env,
+                               stdin=subprocess.DEVNULL, capture_output=True,
+                               timeout=2, start_new_session=True)
+            payload = json.loads(caught.exception.stdout)
+            with self.assertRaises(ProcessLookupError):
+                os.kill(payload['pid'], 0)
+            self.assertEqual(payload['pid'], payload['group'])
+        finally:
+            if payload is not None:
+                self.stop_test_group(payload['group'])
 
     def test_pythonpath_and_cwd_cannot_shadow_backend_or_site(self):
         (self.work / 'receipts.py').write_text('raise RuntimeError("SHADOWED")')

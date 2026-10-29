@@ -128,7 +128,10 @@ python -m unittest discover -s cli/tests -v
 Keep evidence/scoring semantics in Python. Do not duplicate those implementations
 in Rust. Preserve argument boundaries, caller-relative data paths, backend output
 and failure status. `eval prepare` stays offline and strips the provider key from
-its child environment; `eval run` requires explicit model and paid-intent flags.
+the backend environment; `eval run` requires explicit model and paid-intent flags.
+On Unix, use process replacement so PID-only termination stops the backend and
+signal termination stays observable as a signal. Retain regression checks for
+signals and caller timeouts; document non-Unix cancellation limits separately.
 These CLI flags do not replace user authorization. Tests must use local stubs or
 missing credentials for paid-path checks, never real inference.
 

@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use std::env;
 use std::ffi::OsString;
 use std::path::PathBuf;
-use std::process::{self, Command, ExitStatus};
+use std::process::{self, Command};
 
 const HELP: &str = "RECEIPTS — public-evidence audit control surface
 
@@ -38,7 +38,7 @@ const EVAL_HELP: &str = "Usage: receipts [GLOBAL OPTIONS] eval prepare|run [OPTI
   --output DIR                   Required fresh artifact directory; never overwritten
   --model ID                     Required for run; prepare uses the Python default if omitted
   --cases N                      1..16 cases, two calls each (default: 16)
-  --seed N                       Unsigned integer for task order only (default: 42)
+  --seed N                       Unsigned integer for case selection and call order (default: 42)
   --max-output-tokens N           256..2048 per call (default: 1200)
   --allow-paid                   Required for run; forbidden for prepare
 
@@ -187,10 +187,26 @@ fn parse(args: Vec<OsString>) -> Result<Options, String> {
                     return Err(format!("duplicate global option: {name}"));
                 }
                 let value = take_value(&args, &mut index, name)?;
-                if name == "--root" { root = PathBuf::from(value); } else { python = value; }
+                if name == "--root" {
+                    root = PathBuf::from(value);
+                } else {
+                    python = value;
+                }
             }
-            "--help" | "-h" if index + 1 == args.len() => return Ok(Options { root, python, action: Action::Help(HELP.into()) }),
-            "--version" | "-V" if index + 1 == args.len() => return Ok(Options { root, python, action: Action::Version }),
+            "--help" | "-h" if index + 1 == args.len() => {
+                return Ok(Options {
+                    root,
+                    python,
+                    action: Action::Help(HELP.into()),
+                });
+            }
+            "--version" | "-V" if index + 1 == args.len() => {
+                return Ok(Options {
+                    root,
+                    python,
+                    action: Action::Version,
+                });
+            }
             "snowflake" | "utc" | "receipt" | "style" | "funding" | "verify" | "eval" => {
                 let rest = &args[index + 1..];
                 let action = if rest.len() == 1 && (rest[0] == "--help" || rest[0] == "-h") {
@@ -198,14 +214,25 @@ fn parse(args: Vec<OsString>) -> Result<Options, String> {
                 } else if name == "eval" {
                     evaluate(rest)?
                 } else if name == "verify" {
-                    if !rest.is_empty() { return Err("verify accepts no command arguments".into()); }
+                    if !rest.is_empty() {
+                        return Err("verify accepts no command arguments".into());
+                    }
                     Action::Verify
                 } else {
                     Action::Metadata(args[index..].to_vec())
                 };
-                return Ok(Options { root, python, action });
+                return Ok(Options {
+                    root,
+                    python,
+                    action,
+                });
             }
-            _ => return Err("unknown command/global option; see 'receipts --help' (global options precede the command)".into()),
+            _ => {
+                return Err(
+                    "unknown command/global option; see 'receipts --help' (global options precede the command)"
+                        .into(),
+                );
+            }
         }
         index += 1;
     }
@@ -260,20 +287,6 @@ fn backend(options: &Options) -> Result<Command, String> {
     Ok(command)
 }
 
-fn exit_code(status: ExitStatus) -> i32 {
-    if let Some(code) = status.code() {
-        return code;
-    }
-    #[cfg(unix)]
-    {
-        use std::os::unix::process::ExitStatusExt;
-        if let Some(signal) = status.signal() {
-            return 128 + signal;
-        }
-    }
-    1
-}
-
 fn run() -> Result<i32, String> {
     let options = parse(env::args_os().skip(1).collect())?;
     match &options.action {
@@ -289,10 +302,23 @@ fn run() -> Result<i32, String> {
             Ok(0)
         }
         _ => {
-            let status = backend(&options)?.status().map_err(|_| {
-                "could not start Python; use --python with a Python 3.10+ executable"
-            })?;
-            Ok(exit_code(status))
+            let mut command = backend(&options)?;
+            let launch_error =
+                "could not start Python; use --python with a Python 3.10+ executable";
+            #[cfg(unix)]
+            {
+                use std::os::unix::process::CommandExt;
+                // Keep the caller's PID: killing it must stop the Python backend,
+                // including when a timeout targets only this process.
+                let _error = command.exec();
+                // Successful exec never returns. Keep failure diagnostics free of argv/env.
+                Err(launch_error.into())
+            }
+            #[cfg(not(unix))]
+            {
+                let status = command.status().map_err(|_| launch_error)?;
+                Ok(status.code().unwrap_or(1))
+            }
         }
     }
 }

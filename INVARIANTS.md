@@ -240,11 +240,16 @@ argument boundaries and caller-relative input/output paths. The selected checkou
 and Python interpreter are trusted dependencies, not authenticated by the launcher.
 
 **Enforcement:** the Rust CLI uses separate process arguments and Python isolated
-startup with an explicit checkout source path. Offline child processes lose
+startup with an explicit checkout source path. On Unix, process replacement keeps
+the backend at the CLI PID, preserving signal termination and allowing PID-only
+cancellation. Non-Unix spawn-and-wait requires caller-managed process-tree
+supervision; stopping a local process cannot guarantee provider-side cancellation.
+Offline backend processes lose
 `OPENAI_API_KEY`; paid mode requires both an explicit model and `--allow-paid`.
 Unit and integration tests cover output/request parity, paths, failures, secret
-forwarding and paid-mode gating without provider calls. The CLI is not a sandbox,
-and its paid-intent flag is not independent proof of user authorization.
+forwarding, Unix signal/timeout cancellation and paid-mode gating without provider
+calls. The CLI is not a sandbox, and its paid-intent flag is not independent proof
+of user authorization.
 
 ## Verification and changes
 
