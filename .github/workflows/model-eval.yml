@@ -1,0 +1,61 @@
+name: Model evaluation
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: OpenAI model ID (prefer a dated snapshot)
+        type: string
+        default: gpt-5.4-mini-2026-03-17
+        required: true
+      cases:
+        description: Number of cases, 1 to 16 (two calls per case)
+        type: choice
+        options: ['4', '8', '16']
+        default: '16'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: receipts-model-evaluation
+  cancel-in-progress: false
+jobs:
+  evaluate:
+    # Ordinary pushes never incur inference. The marker is an explicit run request.
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[receipts-eval]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Verify harness before inference
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Compare baseline and RECEIPTS
+        env:
+          PYTHONPATH: src
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          MODEL_ID: ${{ inputs.model || vars.RECEIPTS_MODEL || 'gpt-5.4-mini-2026-03-17' }}
+          CASE_LIMIT: ${{ inputs.cases || '16' }}
+        # Inputs go through environment variables and quoted arguments, never shell interpolation.
+        run: python -m receipts.runner --output artifacts/model-run --model "$MODEL_ID" --cases "$CASE_LIMIT"
+      - name: Publish run status in Actions summary
+        if: always()
+        run: |
+          if [ -f artifacts/model-run/summary.md ]; then
+            cat artifacts/model-run/summary.md >> "$GITHUB_STEP_SUMMARY"
+          elif [ -f artifacts/model-run/manifest.json ]; then
+            python -c 'import json; p=json.load(open("artifacts/model-run/manifest.json")); print("Run status:", p["status"], "\nModel calls completed:", p["completed_calls"])' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: model-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/model-run/
+          if-no-files-found: warn
+          retention-days: 30

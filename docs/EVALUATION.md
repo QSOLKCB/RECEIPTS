@@ -1,0 +1,67 @@
+# The first experiment
+
+The unit of evaluation is one atomic claim against a supplied evidence packet.
+No model gets the entire repository, the gold file, browser access, or a tool that
+can fetch more sources. The baseline and RECEIPTS variants share the same schema,
+limitation-code definitions, evidence and model. The changed variable is the
+system instruction text. Therefore this is a prompt comparison, not yet a test
+of autonomous research, source collection, or a multi-step agent.
+
+Sixteen deliberately small synthetic cases are a development suite. Both positive
+and negative controls matter: restraint must not become blanket abstention. The
+suite includes direct authenticated payments and explicit authorship admissions
+that should be acknowledged, alongside tempting but unsupported extensions.
+
+The expected verdict and required evidence/caveat codes live in `evals/gold.json`.
+Only allowlisted packet fields and shared code definitions enter requests. The
+gold is public and the fixtures are small, so contamination and overfitting are
+possible. Some passages explicitly state missing evidence; real investigations
+are less tidy. Success here is a minimum regression check, not OSINT mastery.
+
+## Metrics and their limits
+
+| Metric | What it measures | What it does not establish |
+|---|---|---|
+| Verdict accuracy | Agreement with human-authored synthetic labels | Real-world truth or unbiased labels |
+| Unsupported support | Supported verdict when gold is contradicted or insufficient | Every possible misleading statement in prose |
+| Unnecessary abstention | Insufficient verdict when gold is supported or contradicted | Whether every caveat is excessive |
+| Required citation presence | Required source IDs appear | Citation relevance, entailment, or authentication |
+| Required limitation presence | Required caveat codes appear | Whether the prose honors those caveats |
+| Invalid outputs and API errors | Failures to provide a valid answer | Low substantive performance alone |
+
+Invalid answers and API errors remain in the overall accuracy denominator.
+Unsupported-support and abstention counts are reported for valid answers only;
+read them alongside invalid/error counts. Extra irrelevant citations or caveats
+can inflate the corresponding presence metrics, so those are diagnostics, not an
+overall quality score. No LLM judge is used to score another model's rhetoric.
+
+The artifact retains actual prompts, cases, gold, requested and returned model
+IDs, UTC timestamps, call order, source commit and dirty status, request hashes,
+response IDs and byte hashes, returned text, provider token usage and error codes.
+It does not retain API credentials or hidden reasoning. No exact model replay is
+promised; snapshot names and seeded task order do not eliminate nondeterminism.
+
+A completed experiment has collected and scored responses; even zero correct
+verdicts is still an honestly completed experiment. CI tests the mechanics. Read
+the actual metrics before claiming any improvement.
+
+## Next experiments
+
+Have an independent reviewer write and lock a held-out suite before comparing
+prompts. Include conflicting primary sources, positive coordination evidence,
+unreliable but plausible metadata, exhaustive bounded registries, time-zone
+ambiguities, changing account ownership, large but confounded style corpora,
+funding commitments versus settlement, and source-selection bias. Use fictional
+entities or a carefully reviewed public-source dataset with documented rights.
+
+Keep evidence fixed for paired prompt comparisons. Repeat runs and report paired
+changes, variance and failures rather than selecting the best run. Test other
+providers through explicit adapters with their own schema and failure tests.
+Only then evaluate active retrieval separately, including relevance, coverage,
+source diversity, prompt injection, cost, and the frequency of justified stopping.
+Preregister aggregation and acceptance criteria before examining held-out results.
+
+Before real-world use, human reviewers must examine whether the rationale entails
+the verdict, whether cited content actually supports it, whether alternative
+explanations were fairly considered, and whether consequential claims exceed the
+evidence. There is no universal numeric trust threshold in this release.

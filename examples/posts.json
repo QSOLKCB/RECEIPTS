@@ -1,0 +1,35 @@
+[
+  {
+    "platform": "x",
+    "post_id": "1",
+    "account_id": "111",
+    "is_target": true,
+    "is_retweet": false,
+    "is_quote": false,
+    "is_partial": false,
+    "thread_id": "thread-1",
+    "text": "This is a prepared opening statement."
+  },
+  {
+    "platform": "x",
+    "post_id": "2",
+    "account_id": "111",
+    "is_target": true,
+    "is_retweet": false,
+    "is_quote": false,
+    "is_partial": false,
+    "thread_id": "thread-1",
+    "text": "This continues the prepared statement."
+  },
+  {
+    "platform": "x",
+    "post_id": "3",
+    "account_id": "111",
+    "is_target": true,
+    "is_retweet": false,
+    "is_quote": false,
+    "is_partial": false,
+    "thread_id": null,
+    "text": "yes that makes sense"
+  }
+]

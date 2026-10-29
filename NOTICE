@@ -1,0 +1,13 @@
+RECEIPTS
+Copyright 2026 Trent Slade / QSOL-IMC and contributors.
+
+Original implementation, prompts, documentation and synthetic test cases:
+Apache License 2.0. AI-assisted development; no claim of independent peer review.
+
+Methodological origin: Trent Slade (2026), public-evidence audit, Version 1.1.0,
+https://doi.org/10.5281/zenodo.23759846 (separately published under CC BY 4.0).
+The report and third-party source corpus are not included in this repository.
+
+The classic Twitter Snowflake layout and epoch are documented by Twitter's
+archived Snowflake project. This repository contains an independent decoder,
+not copied implementation code. See docs/REFERENCES.md.

@@ -1,0 +1,14 @@
+[
+  {
+    "payer": "donor-d",
+    "payee": "institute-l",
+    "amount": "100000",
+    "currency": "USD",
+    "status": "paid",
+    "payment_date": "2026-01-12",
+    "purpose": "Unrestricted institutional grant",
+    "source_ids": [
+      "S1"
+    ]
+  }
+]
