@@ -1,0 +1,303 @@
+{
+  "v02-control-fact": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "no_causal_link"
+    ],
+    "justification": "The payment occurred, but this packet establishes neither actual direction of conclusion C nor its absence. This is a claim about what happened.",
+    "verdict_examples": {
+      "supported": "An authenticated public instruction from D naming conclusion C, together with a truthful public acknowledgment by P that D dictated it, would establish that control occurred.",
+      "contradicted": "A stipulated complete and authentic public record excluding D from every decision about conclusion C throughout the defined drafting period would establish that D did not dictate it. Mere payment silence would not.",
+      "insufficient": "A payment-only disclosure with no control evidence leaves actual editorial direction unresolved, even though the disclosure itself is inadequate to establish direction."
+    },
+    "legacy_case_ids": [
+      "money-not-direction"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-control-evidence": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "no_causal_link"
+    ],
+    "justification": "S1 is explicitly limited to payment fields and has no evidence of direction. That defeats the claimed sufficiency of S1, while actual control remains unresolved.",
+    "verdict_examples": {
+      "supported": "If the named disclosure also contained authenticated, reliable evidence of D dictating C, its contents could establish direction; payment by itself would still not do so.",
+      "contradicted": "A fully supplied disclosure limited to payer, payee, amount, date and report purpose does not establish editorial direction.",
+      "insufficient": "If only an incomplete description of S1 were supplied and its material control-related contents were unknown, S1 sufficiency could remain unresolved."
+    },
+    "legacy_case_ids": [
+      "money-not-direction"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-control-documented": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1",
+      "S2"
+    ],
+    "required_limitations": [],
+    "justification": "The specific public instruction and stipulated accurate acknowledgment establish direction of this conclusion. Funding alone is not the basis.",
+    "verdict_examples": {
+      "supported": "An authenticated public instruction from D naming conclusion C, together with a truthful public acknowledgment by P that D dictated it, would establish that control occurred.",
+      "contradicted": "A stipulated complete and authentic public record excluding D from every decision about conclusion C throughout the defined drafting period would establish that D did not dictate it. Mere payment silence would not.",
+      "insufficient": "A payment-only disclosure with no control evidence leaves actual editorial direction unresolved, even though the disclosure itself is inadequate to establish direction."
+    },
+    "legacy_case_ids": [
+      "money-not-direction"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-payment-draft-chronology": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "time_semantics"
+    ],
+    "justification": "The first drafting predates the specified transfer. This refutes the claimed initiation by that later event, not all possible influence by D.",
+    "verdict_examples": {
+      "supported": "A dated public record placing initial drafting after the transfer, plus reliable explicit evidence that the transfer initiated it, would establish the stated causal event.",
+      "contradicted": "An authenticated first draft predating the specified completed transfer rules out that later event initiating the earlier draft.",
+      "insufficient": "A payment followed by publication, without a first-draft date or causal evidence, leaves the initiation claim unresolved."
+    },
+    "legacy_case_ids": [
+      "policy-before-event"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-style-authors-fact": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "small_sample",
+      "genre_confound",
+      "identity_unresolved"
+    ],
+    "justification": "The comparison does not determine whether these texts actually have the same or different authors.",
+    "verdict_examples": {
+      "supported": "Accurate authenticated public authorship records assigning every selected A text to Ada and every selected C text to distinct person Bea would establish different authors for this specified corpus.",
+      "contradicted": "Accurate authenticated public authorship records assigning both selected sets to the same sole author would negate different authorship for this corpus.",
+      "insufficient": "The small, genre-confounded comparison without authenticated authorship links leaves both same-author and different-author possibilities open."
+    },
+    "legacy_case_ids": [
+      "style-tiny-thread"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-style-evidence": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "small_sample",
+      "genre_confound",
+      "identity_unresolved"
+    ],
+    "justification": "The supplied description identifies an uncalibrated descriptive comparison with material sample and genre confounds. It cannot establish human attribution. Rejecting this sufficiency claim does not establish a common author.",
+    "verdict_examples": {
+      "supported": "A materially different analysis with independently established authorship evidence sufficient for this corpus could establish different authors; capitalization differences alone would not.",
+      "contradicted": "The fully described, uncalibrated and confounded comparison cannot establish different human authors.",
+      "insufficient": "If the contents and validation of a claimed authorship analysis were not supplied, whether that analysis establishes the conclusion could remain unresolved."
+    },
+    "legacy_case_ids": [
+      "style-tiny-thread"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-authors-different": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [],
+    "justification": "The stipulated accurate, corpus-specific sole-authorship acknowledgments establish distinct authors without style inference.",
+    "verdict_examples": {
+      "supported": "Accurate authenticated public authorship records assigning every selected A text to Ada and every selected C text to distinct person Bea would establish different authors for this specified corpus.",
+      "contradicted": "Accurate authenticated public authorship records assigning both selected sets to the same sole author would negate different authorship for this corpus.",
+      "insufficient": "The small, genre-confounded comparison without authenticated authorship links leaves both same-author and different-author possibilities open."
+    },
+    "legacy_case_ids": [
+      "style-tiny-thread",
+      "signed-authorship"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-authors-same": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [],
+    "justification": "A single stipulated sole author for both complete selected sets directly negates different authors for this corpus. This does not generalize to unlisted posts.",
+    "verdict_examples": {
+      "supported": "Accurate authenticated public authorship records assigning every selected A text to Ada and every selected C text to distinct person Bea would establish different authors for this specified corpus.",
+      "contradicted": "Accurate authenticated public authorship records assigning both selected sets to the same sole author would negate different authorship for this corpus.",
+      "insufficient": "The small, genre-confounded comparison without authenticated authorship links leaves both same-author and different-author possibilities open."
+    },
+    "legacy_case_ids": [
+      "style-tiny-thread",
+      "signed-authorship"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-indirect-not-direct": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1",
+      "S2"
+    ],
+    "required_limitations": [
+      "indirect_funding"
+    ],
+    "justification": "Institutional funding and employment do not establish a direct D-to-P transfer, but neither rules one out.",
+    "verdict_examples": {
+      "supported": "An authenticated public settled-payment record identifying D as direct payer and P as direct payee within the specified period would support the transfer claim.",
+      "contradicted": "A demonstrably complete, authenticated public register covering every direct D-to-P transfer in the exact period, with no entries, would negate that bounded claim.",
+      "insufficient": "A D-to-institute grant and P employment, without a direct transfer record or exhaustive exclusion, establish neither a direct payment nor its absence."
+    },
+    "legacy_case_ids": [
+      "money-intermediary"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-direct-settled": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [],
+    "justification": "The evidence directly establishes the amount, parties, settlement date and purpose in the exact transfer proposition.",
+    "verdict_examples": {
+      "supported": "An authenticated accurate settled-transfer disclosure matching D, P, USD 5000, 2026-09-01 and Report R supports this specific transfer.",
+      "contradicted": "A complete authenticated settlement record showing that the specified transfer never settled would negate this claim; a different unrelated payment would not.",
+      "insufficient": "An unsigned pledge or an unverified payment screenshot alone would leave this exact settled-transfer claim unresolved."
+    },
+    "legacy_case_ids": [
+      "money-direct-payment"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-direct-transfer-excluded": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [],
+    "justification": "The stipulated complete bounded register excludes the exact claimed transfer. It does not exclude other relationships.",
+    "verdict_examples": {
+      "supported": "An authenticated public settled-payment record identifying D as direct payer and P as direct payee within the specified period would support the transfer claim.",
+      "contradicted": "A demonstrably complete, authenticated public register covering every direct D-to-P transfer in the exact period, with no entries, would negate that bounded claim.",
+      "insufficient": "A D-to-institute grant and P employment, without a direct transfer record or exhaustive exclusion, establish neither a direct payment nor its absence."
+    },
+    "legacy_case_ids": [
+      "money-intermediary",
+      "no-results-not-exoneration"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-absence-incomplete": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "incomplete_search"
+    ],
+    "justification": "An incomplete search cannot establish absence, and its incompleteness does not establish a payment either.",
+    "verdict_examples": {
+      "supported": "A demonstrably complete authenticated register for all direct D-to-P transfers in the exact period, showing none, supports this bounded absence claim.",
+      "contradicted": "One authenticated settled direct D-to-P transfer within the period contradicts the absence claim.",
+      "insufficient": "No matches in incomplete registers establish neither universal absence within the period nor the existence of a payment."
+    },
+    "legacy_case_ids": [
+      "no-results-not-exoneration"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-absence-complete": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [],
+    "justification": "Explicitly complete coverage supports only this bounded absence finding. It supplies the detection basis missing from the incomplete-search case.",
+    "verdict_examples": {
+      "supported": "A demonstrably complete authenticated register for all direct D-to-P transfers in the exact period, showing none, supports this bounded absence claim.",
+      "contradicted": "One authenticated settled direct D-to-P transfer within the period contradicts the absence claim.",
+      "insufficient": "No matches in incomplete registers establish neither universal absence within the period nor the existence of a payment."
+    },
+    "legacy_case_ids": [
+      "no-results-not-exoneration"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-copied-origins": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1",
+      "S2",
+      "S3"
+    ],
+    "required_limitations": [
+      "dependent_sources"
+    ],
+    "justification": "All three articles derive from blog B, with no independent firsthand account supplied. The claim counts repetitions as independent origins.",
+    "verdict_examples": {
+      "supported": "Three verified reports based on three distinct firsthand witnesses, with established independence, would support the count.",
+      "contradicted": "Three reports explicitly derived from the same original blog, with no independent verification, negate three independent firsthand accounts.",
+      "insufficient": "If sourcing and independence of the three articles were unknown, their count alone would not settle the independent-origin claim."
+    },
+    "legacy_case_ids": [
+      "copied-news"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-account-continuity": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [],
+    "justification": "The same stable numeric account ID establishes account continuity across these captures, without authenticating a human.",
+    "verdict_examples": {
+      "supported": "Two genuine captures with the same stable account ID and different handles establish account continuity.",
+      "contradicted": "Genuine captures with two distinct stable account IDs negate the claim that they show the same account, without determining human identity.",
+      "insufficient": "Unverified screenshots with missing account IDs leave account continuity unresolved."
+    },
+    "legacy_case_ids": [
+      "rename-continuity"
+    ],
+    "review_status": "not_independently_reviewed"
+  },
+  "v02-offensive-authorship": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "identity_unresolved"
+    ],
+    "justification": "The offensive content is established at the account level. The similar display name does not establish personal authorship by Ada or its negation.",
+    "verdict_examples": {
+      "supported": "An authenticated accurate public acknowledgment by Ada identifying post 777 as her own work would support personal authorship.",
+      "contradicted": "Reliable authenticated public evidence assigning sole authorship of post 777 to a different person would negate Ada personally writing it.",
+      "insufficient": "A genuine account-level post plus a similar display name, without a human authorship link, leaves Ada attribution unresolved."
+    },
+    "legacy_case_ids": [
+      "offensive-content-attribution"
+    ],
+    "review_status": "not_independently_reviewed"
+  }
+}

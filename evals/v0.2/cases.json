@@ -1,0 +1,262 @@
+[
+  {
+    "case_id": "v02-control-fact",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D dictated conclusion C in Report R before its publication.",
+    "scope": "D and P; conclusion C in Report R; drafting through publication on 2026-09-09. Other reports and later revisions are outside scope.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "control-payment-disclosure",
+        "text": "An authenticated, lawfully public disclosure records legal entity D paying person P USD 5000, settled on 2026-09-01, for Report R published on 2026-09-09. It states only payer, payee, amount, settlement date and report purpose. It contains no editorial term, instruction or testimony about control. No other evidence about control is supplied."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-control-evidence",
+    "kind": "synthetic",
+    "claim_type": "evidentiary_sufficiency",
+    "claim": "The payment disclosure S1 alone establishes that D dictated conclusion C in Report R.",
+    "scope": "Assess the sufficiency of S1 as supplied, for conclusion C before publication on 2026-09-09; do not decide whether undisclosed control actually occurred.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "control-payment-disclosure",
+        "text": "An authenticated, lawfully public disclosure records legal entity D paying person P USD 5000, settled on 2026-09-01, for Report R published on 2026-09-09. It states only payer, payee, amount, settlement date and report purpose. It contains no editorial term, instruction or testimony about control. No other evidence about control is supplied."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-control-documented",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D dictated conclusion C in Report R before its publication.",
+    "scope": "D and P; conclusion C only; Report R published 2026-09-09. This does not concern every conclusion or all work by P.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "control-documented-origin-1",
+        "text": "An authenticated, lawfully public 2026-08-20 instruction from D to P says to replace conclusion C with the exact sentence later published as C in Report R."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "control-documented-origin-2",
+        "text": "P publicly acknowledges on 2026-09-10 that D dictated conclusion C and that P followed that instruction. Identity, authenticity and the accuracy of this acknowledgment are stipulated for this synthetic case."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-payment-draft-chronology",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The payment D made on 2026-09-01 initiated the first drafting of conclusion C in Report R.",
+    "scope": "Initiation of the first draft of conclusion C only. Later influence, revisions, anticipation of payment and publicity are separate propositions.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "payment-draft-chronology-origin-1",
+        "text": "Authenticated public version records show conclusion C was first drafted on 2026-06-01. A separate authenticated public disclosure dates the settled payment from D to P to 2026-09-01. The claim is specifically that this later completed transfer initiated that earlier drafting event."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-style-authors-fact",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The selected texts from accounts A and C were written by different human authors.",
+    "scope": "The authors of the specific selected texts from accounts A and C, posted during 2026-08-01 through 2026-09-10; not account ownership at other times.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "selected-style-comparison",
+        "text": "Account A has 240 selected informal posts and 3938 Latin-script tokens. Account C has 11 selected posts with 392 tokens, seven belonging to a prepared statement. Excluding that thread leaves four replies and 46 tokens. C has more initial capitals. The comparison is descriptive: no reference-author data, calibrated attribution model or independent human-authorship evidence is supplied. The counts and the description of this comparison are stipulated accurate."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-style-evidence",
+    "kind": "synthetic",
+    "claim_type": "evidentiary_sufficiency",
+    "claim": "The descriptive style comparison in S1 establishes that the selected A and C texts have different human authors.",
+    "scope": "Evaluate only the described comparison for the exact selected 2026-08-01 through 2026-09-10 texts; no universal sample threshold is proposed.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "selected-style-comparison",
+        "text": "Account A has 240 selected informal posts and 3938 Latin-script tokens. Account C has 11 selected posts with 392 tokens, seven belonging to a prepared statement. Excluding that thread leaves four replies and 46 tokens. C has more initial capitals. The comparison is descriptive: no reference-author data, calibrated attribution model or independent human-authorship evidence is supplied. The counts and the description of this comparison are stipulated accurate."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-authors-different",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The selected texts from accounts A and C were written by different human authors.",
+    "scope": "The authors of the specific selected texts from accounts A and C, posted during 2026-08-01 through 2026-09-10; not account ownership at other times.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "authors-different-origin-1",
+        "text": "An authenticated public corpus record lists the exact selected A and C post IDs. Ada publicly acknowledges sole authorship of every listed A post; Bea publicly acknowledges sole authorship of every listed C post. The identities of Ada and Bea as different people, exclusive authorship, corpus completeness and accuracy of both acknowledgments are stipulated in this synthetic fixture."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-authors-same",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The selected texts from accounts A and C were written by different human authors.",
+    "scope": "The authors of the specific selected texts from accounts A and C, posted during 2026-08-01 through 2026-09-10; not account ownership at other times.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "authors-same-origin-1",
+        "text": "An authenticated public corpus record lists the exact selected A and C post IDs. Ada publicly acknowledges sole authorship of every listed post in both sets. The identity link, exclusive authorship, corpus completeness and accuracy of that acknowledgment are stipulated in this synthetic fixture."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-indirect-not-direct",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D made a direct payment to P during 2025-01-01 through 2026-09-30.",
+    "scope": "Direct transfer from legal entity D to person P in the stated period. Institute payments to P, purpose, editorial control and resignation financing are separate claims.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "indirect-not-direct-origin-1",
+        "text": "An authenticated public filing records D paying Institute L an unrestricted USD 100000 grant in 2025."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "indirect-not-direct-origin-2",
+        "text": "An authenticated public directory lists P as employed by L during the period. No direct transfer to P, earmark or complete register of D-to-P transfers is supplied."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-direct-settled",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D paid P USD 5000 on 2026-09-01 for Report R.",
+    "scope": "The specified direct settled transfer only; no inference about editorial control or motive.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "direct-settled-origin-1",
+        "text": "An authenticated, lawfully public payment disclosure uniquely identifies D as payer and P as payee, a USD 5000 transfer settled on 2026-09-01 and its stated purpose of Report R. Identity, authenticity, accuracy and settlement are stipulated; it is not merely a commitment."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-direct-transfer-excluded",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D made a direct payment to P during 2025-01-01 through 2026-09-30.",
+    "scope": "Direct D-to-P payments only, within the stated period; indirect benefits and other time periods are outside scope.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "direct-transfer-excluded-origin-1",
+        "text": "A lawfully public synthetic register is stipulated authentic, accurate and complete for every direct transfer from D to P across all payment channels during 2025-01-01 through 2026-09-30. It contains zero such transfers. Completeness is an explicit fixture assumption, not a property inferred from a failed web search."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-absence-incomplete",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D made no direct payments to P during 2025-01-01 through 2026-09-30.",
+    "scope": "Absence of direct D-to-P payments in this period only; not absence of all connections anywhere.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "absence-incomplete-origin-1",
+        "text": "A researcher searched two public grant registers for exact D and P names over 2025-01-01 through 2026-09-30 and found no matches. Neither register is exhaustive for direct payments, aliases were not searched, and failed retrievals remain unresolved."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-absence-complete",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D made no direct payments to P during 2025-01-01 through 2026-09-30.",
+    "scope": "Absence of direct D-to-P payments within the stated period; exclude all other relationship types and periods.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "absence-complete-origin-1",
+        "text": "A lawfully public synthetic register is stipulated authentic, accurate and complete for every direct transfer from D to P across all payment channels during 2025-01-01 through 2026-09-30. It contains zero such transfers. This completeness is expressly stipulated, not inferred from finding nothing in an incomplete search."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-copied-origins",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Articles A, C and D supply three independent firsthand accounts of the allegation.",
+    "scope": "Only the three named articles as captured by the cutoff; count underlying firsthand evidence origins, not publications.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "blog-b",
+        "text": "Article A explicitly cites anonymous blog B as its sole source and reports no firsthand verification."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "blog-b",
+        "text": "Article C explicitly repeats Article A and supplies no new witness or firsthand verification."
+      },
+      {
+        "source_id": "S3",
+        "origin_id": "blog-b",
+        "text": "Article D explicitly repeats Article A and supplies no new witness or firsthand verification."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-account-continuity",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The two captures show the same platform account using different handles.",
+    "scope": "The two specified captures only: 2021-12-01 and 2022-03-01. Human ownership and personal authorship are separate.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "account-continuity-origin-1",
+        "text": "Authenticated platform captures show numeric account ID 111 using @cobalt on 2021-12-01 and @cobalt2 on 2022-03-01. The captures and stable numeric-ID semantics are stipulated genuine."
+      }
+    ]
+  },
+  {
+    "case_id": "v02-offensive-authorship",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Ada Vale personally wrote post 777.",
+    "scope": "The one specified offensive post from account ID 222, dated 2021-12-23; not other posts or the truth of its content.",
+    "cutoff_utc": "2026-10-29T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "offensive-authorship-origin-1",
+        "text": "A genuine archive shows account ID 222 posted an unambiguously racist statement as post 777 on 2021-12-23. Its display name resembles Ada Vale. No authenticated human ownership or personal-authorship acknowledgment is supplied."
+      }
+    ]
+  }
+]

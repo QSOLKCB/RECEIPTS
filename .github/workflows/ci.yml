@@ -27,10 +27,19 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m receipts.runner --dry-run --output artifacts/dry-run
+      - name: Prepare opt-in v0.2 suite without inference
+        env:
+          PYTHONPATH: src
+        run: python -m receipts.runner --suite v0.2 --dry-run --output artifacts/dry-run-v02
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: prepared-experiment
           path: artifacts/dry-run/
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: prepared-experiment-v02
+          path: artifacts/dry-run-v02/
           retention-days: 14
 
   rust-cli:

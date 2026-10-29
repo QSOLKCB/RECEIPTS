@@ -165,6 +165,26 @@ class ControlSurfaceTests(unittest.TestCase):
         after = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (self.work / 'saved').iterdir()}
         self.assertEqual(before, after)
 
+    def test_opt_in_v02_matches_direct_python_and_keeps_paid_guard(self):
+        args = ['--suite', 'v0.2', '--model', 'offline-fixture', '--cases', '4', '--seed', '13']
+        result = self.call(['eval', 'prepare', '--output', 'rust-v02', *args],
+                           env={**self.env, 'OPENAI_API_KEY': 'synthetic-test-value'})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        script = 'import sys,runpy; sys.path.insert(0,sys.argv.pop(1)); runpy.run_module("receipts.runner",run_name="__main__")'
+        direct = subprocess.run([sys.executable, '-I', '-S', '-c', script, str(ROOT / 'src'),
+                                 '--root', str(ROOT), '--dry-run', '--output', 'python-v02', *args],
+                                cwd=self.work, env=self.env, capture_output=True, text=True, timeout=30)
+        self.assertEqual(direct.returncode, 0, direct.stderr)
+        for name in ('requests.json', 'cases.json', 'gold.json', 'prompts.json', 'suite.json'):
+            self.assertEqual((self.work / 'rust-v02' / name).read_bytes(),
+                             (self.work / 'python-v02' / name).read_bytes())
+        manifest = json.loads((self.work / 'rust-v02/manifest.json').read_text())
+        self.assertEqual(manifest['suite_version'], 'v0.2')
+        self.assertEqual((manifest['planned_calls'], manifest['attempted_calls']), (8, 0))
+        blocked = self.call(['eval', 'run', '--suite', 'v0.2', '--output', 'no-paid', '--model', 'fixture'])
+        self.assertEqual(blocked.returncode, 2)
+        self.assertFalse((self.work / 'no-paid').exists())
+
     def test_backend_failures_are_not_relabelled_as_success(self):
         result = self.call(['snowflake', '1'], root=self.fake_checkout(),
                            env={**self.env, 'RECEIPTS_TEST_EXIT': '9'})
@@ -275,6 +295,7 @@ time.sleep(60)
     def test_unknown_or_duplicate_eval_flags_cannot_reach_backend(self):
         root = self.fake_checkout()
         for options in (['--allow-paid'], ['--endpoint', 'https://example.invalid'],
+                        ['--suite', '../v0.1'], ['--suite', 'v0.1', '--suite', 'v0.2'],
                         ['--cases', '17'], ['--model', 'one', '--model', 'two'],
                         ['--max-output-tokens', '2049']):
             result = self.call(['eval', 'prepare', '--output', 'output', *options], root=root)

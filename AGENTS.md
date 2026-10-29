@@ -98,6 +98,14 @@ held out or independently human-adjudicated. Do not call single-run results a
 model ranking, proof of reduced hallucination, or a successful real-world audit.
 Separate strict output validity, verdict labels, prose fidelity and action scope.
 
+The default v0.1 evaluator, `evals/cases.json`, `evals/gold.json` and both prompts
+remain the historical contract. Opt-in v0.2 lives in `evals/v0.2/` and
+`src/receipts/evaluation_v2.py`; read its README before changing it. Keep suite and
+scoring versions explicit, and keep rubric examples/lineage/review metadata out
+of model requests. A label-only diagnostic cannot repair an invalid response.
+Citation entailment, rationale fidelity and caveat adequacy remain unassessed
+until substantive review; do not convert code/tag presence into a quality judgment.
+
 ## Implementation and verification
 
 The evidence runtime uses Python 3.10+ and the standard library. The Rust CLI
@@ -139,6 +147,7 @@ For request/runner changes also prepare a dry run in a fresh output directory:
 
 ```bash
 PYTHONPATH=src python -m receipts.runner --dry-run --output artifacts/review-dry-run
+PYTHONPATH=src python -m receipts.runner --suite v0.2 --dry-run --output artifacts/review-dry-run-v02
 ```
 
 Never overwrite an existing output directory. Add focused tests for meaningful

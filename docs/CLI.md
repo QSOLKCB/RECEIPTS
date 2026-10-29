@@ -88,12 +88,23 @@ budget. Duplicate or unknown evaluation options are rejected before Python start
 Pass flags and values as separate arguments; `--option=value` is not supported
 by the Rust global/evaluation parser.
 
+`--suite v0.1|v0.2` selects an allowlisted suite; the default remains `v0.1`.
+Both contain 16 cases, so existing call limits apply. For the new atomic-claim
+development suite, prepare offline with:
+
+```bash
+receipts eval prepare --suite v0.2 --output artifacts/prepared-v02
+```
+
+The [v0.2 contract](../evals/v0.2/README.md) documents its typed claims, distinct
+scoring fields and pending human review. Selecting it does not enable paid mode.
+
 The runner shuffles the suite before taking `--cases`, then shuffles the paired
 calls. Changing the seed can therefore change which cases a reduced run covers,
 as well as their call order. It does not seed model sampling or make responses
-deterministic. The existing manifest key `seed_for_order_only` is retained for
-format compatibility; inspect `selected_case_ids` and `call_order` for the actual
-coverage and sequence when comparing runs.
+deterministic. The v0.1 manifest key `seed_for_order_only` is retained for format
+compatibility; v0.2 uses `seed_for_case_selection_and_call_order`. Inspect
+`selected_case_ids` and `call_order` for actual coverage and sequence in either version.
 
 For an explicitly authorized run, with `OPENAI_API_KEY` already supplied through
 the environment or secret mechanism:
@@ -166,5 +177,6 @@ that it blocks before inference. Tests never send provider requests.
 Unix regression tests also check backend signal status, PID-only SIGTERM/SIGKILL
 and caller timeouts against a waiting local stub, with no surviving backend.
 
-The existing 40 preserved experiment files and all Python evidence/scoring modules
-remain unchanged. New runs still need new directories, plans and provenance.
+The existing 40 preserved experiment files and the v0.1 evidence/scoring module
+remain unchanged. v0.2 has a separate Python evaluator selected by the runner;
+Rust owns no scoring logic. New runs still need new directories, plans and provenance.
