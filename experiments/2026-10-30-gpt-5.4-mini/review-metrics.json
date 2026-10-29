@@ -1,0 +1,42 @@
+{
+  "github_run_id": 40897728014,
+  "github_attempt": 2,
+  "artifact_id": 12908806614,
+  "artifact_zip_sha256": "d4b7c646ee6e207dce82f46d2f1c525dd854997af227b3efc28633537ba01453",
+  "source_commit": "6de64705805219ac025c2f318df94aec4652ac26",
+  "review_date_adelaide": "2026-10-30",
+  "pricing_url": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+  "usd_per_million_tokens": {
+    "uncached_input": "0.75",
+    "cached_input": "0.075",
+    "output": "4.50"
+  },
+  "billing_status": "Estimate from response usage and published standard rates; not verified against billing dashboard.",
+  "variants": {
+    "baseline": {
+      "input_tokens": 8987,
+      "output_tokens": 2318,
+      "total_tokens": 11305,
+      "cached_input_tokens": 0,
+      "reasoning_tokens": 0,
+      "estimated_usd": "0.01717125",
+      "unsupported_contradiction_against_frozen_gold": 1,
+      "mismatches": [
+        "money-not-direction"
+      ]
+    },
+    "receipts": {
+      "input_tokens": 16971,
+      "output_tokens": 2177,
+      "total_tokens": 19148,
+      "cached_input_tokens": 0,
+      "reasoning_tokens": 0,
+      "estimated_usd": "0.02252475",
+      "unsupported_contradiction_against_frozen_gold": 1,
+      "mismatches": [
+        "money-intermediary"
+      ]
+    }
+  },
+  "total_estimated_usd": "0.03969600"
+}

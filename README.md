@@ -72,7 +72,21 @@ An API error, refusal, incomplete response, or malformed answer cannot silently
 become a successful score. A workflow completing successfully means the experiment
 ran; it does **not** mean the model performed well or that the prompt helped.
 
+The separate **Compare GPT-4o and GPT-4.1** workflow runs the same frozen suite on
+`gpt-4o-2024-11-20` and `gpt-4.1-2025-04-14`: 64 calls total, with separate artifacts.
+Run it manually or explicitly request it with `[receipts-compare]` in a main-branch
+commit message. It never runs on pull requests or ordinary unmarked pushes.
+These snapshots are deprecated with a documented shutdown date of 14 January
+2027; availability and project access should be checked before a later rerun.
+
 ## What the first experiment measures
+
+**First completed run:** both prompts scored 15/16 on the frozen development
+labels; this run showed no verdict-accuracy advantage for RECEIPTS. A funding
+case exposed unsupported contradiction, and post-run inspection found an
+ambiguity in another case's wording. All 32 responses and the unchanged scores
+are preserved in the [first experiment and review](experiments/2026-10-30-gpt-5.4-mini/REVIEW.md).
+Estimated API cost was USD 0.039696. These are preliminary development results.
 
 The 16 original synthetic development cases cover account continuity, recycled
 handles, human attribution, small writing samples, direct versus indirect funding,

@@ -1,0 +1,175 @@
+{
+  "format": "receipts-eval-v0.1",
+  "started_at_utc": "2026-10-29T15:14:55.179183Z",
+  "status": "completed",
+  "dry_run": false,
+  "model_requested": "gpt-5.4-mini-2026-03-17",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "max_output_tokens_per_call": 1200,
+  "planned_calls": 32,
+  "attempted_calls": 32,
+  "completed_calls": 32,
+  "retries": 0,
+  "transport": "official_openai_responses_api",
+  "model_identity_basis": "provider response field; not independent model attestation",
+  "seed_for_order_only": 42,
+  "provider_sampling": "provider defaults; no determinism claim",
+  "commit": "6de64705805219ac025c2f318df94aec4652ac26",
+  "working_tree_dirty": false,
+  "cases_sha256": "f1a9397b593354889e91d344da6f1122a225c3292b9d9a2da47658e94fee471b",
+  "gold_sha256": "d43ebd252ce3302651930ce796360f054b8d0b7a7d3d2ed56cb7889f15a81efb",
+  "prompt_sha256": {
+    "baseline": "4a8593eaa57e868dc33eb6620f937a6e0fb2af5c93f104da1ce23df04ba161b9",
+    "receipts": "ee5a7bce0ec033cb62867389ebdf5724237cf42874d6b153ea40cbef2e00a8ce"
+  },
+  "selected_case_ids": [
+    "no-results-not-exoneration",
+    "utc-date-correction",
+    "money-direct-payment",
+    "money-not-direction",
+    "embedded-instruction",
+    "capture-not-creation",
+    "signed-authorship",
+    "copied-news",
+    "rename-continuity",
+    "same-id-not-human",
+    "earlier-warning",
+    "policy-before-event",
+    "money-intermediary",
+    "offensive-content-attribution",
+    "recycled-handle",
+    "style-tiny-thread"
+  ],
+  "call_order": [
+    [
+      "offensive-content-attribution",
+      "receipts"
+    ],
+    [
+      "recycled-handle",
+      "baseline"
+    ],
+    [
+      "money-direct-payment",
+      "receipts"
+    ],
+    [
+      "money-not-direction",
+      "receipts"
+    ],
+    [
+      "policy-before-event",
+      "receipts"
+    ],
+    [
+      "signed-authorship",
+      "baseline"
+    ],
+    [
+      "capture-not-creation",
+      "baseline"
+    ],
+    [
+      "no-results-not-exoneration",
+      "receipts"
+    ],
+    [
+      "same-id-not-human",
+      "baseline"
+    ],
+    [
+      "style-tiny-thread",
+      "receipts"
+    ],
+    [
+      "earlier-warning",
+      "baseline"
+    ],
+    [
+      "money-not-direction",
+      "baseline"
+    ],
+    [
+      "embedded-instruction",
+      "baseline"
+    ],
+    [
+      "rename-continuity",
+      "receipts"
+    ],
+    [
+      "style-tiny-thread",
+      "baseline"
+    ],
+    [
+      "money-intermediary",
+      "receipts"
+    ],
+    [
+      "signed-authorship",
+      "receipts"
+    ],
+    [
+      "rename-continuity",
+      "baseline"
+    ],
+    [
+      "no-results-not-exoneration",
+      "baseline"
+    ],
+    [
+      "copied-news",
+      "receipts"
+    ],
+    [
+      "same-id-not-human",
+      "receipts"
+    ],
+    [
+      "offensive-content-attribution",
+      "baseline"
+    ],
+    [
+      "utc-date-correction",
+      "receipts"
+    ],
+    [
+      "recycled-handle",
+      "receipts"
+    ],
+    [
+      "earlier-warning",
+      "receipts"
+    ],
+    [
+      "capture-not-creation",
+      "receipts"
+    ],
+    [
+      "copied-news",
+      "baseline"
+    ],
+    [
+      "money-direct-payment",
+      "baseline"
+    ],
+    [
+      "money-intermediary",
+      "baseline"
+    ],
+    [
+      "policy-before-event",
+      "baseline"
+    ],
+    [
+      "embedded-instruction",
+      "receipts"
+    ],
+    [
+      "utc-date-correction",
+      "baseline"
+    ]
+  ],
+  "limitation": "Synthetic development suite, not a held-out benchmark or truth certification.",
+  "ended_at_utc": "2026-10-29T15:15:50.467506Z"
+}

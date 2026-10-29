@@ -22,7 +22,7 @@ are less tidy. Success here is a minimum regression check, not OSINT mastery.
 
 | Metric | What it measures | What it does not establish |
 |---|---|---|
-| Verdict accuracy | Agreement with human-authored synthetic labels | Real-world truth or unbiased labels |
+| Verdict accuracy | Agreement with project-authored, AI-assisted synthetic labels | Real-world truth, independently adjudicated labels, or unbiased labels |
 | Unsupported support | Supported verdict when gold is contradicted or insufficient | Every possible misleading statement in prose |
 | Unnecessary abstention | Insufficient verdict when gold is supported or contradicted | Whether every caveat is excessive |
 | Required citation presence | Required source IDs appear | Citation relevance, entailment, or authentication |
@@ -40,6 +40,13 @@ IDs, UTC timestamps, call order, source commit and dirty status, request hashes,
 response IDs and byte hashes, returned text, provider token usage and error codes.
 It does not retain API credentials or hidden reasoning. No exact model replay is
 promised; snapshot names and seeded task order do not eliminate nondeterminism.
+
+The [first completed experiment](../experiments/2026-10-30-gpt-5.4-mini/REVIEW.md)
+preserves original results and documents a false-contradiction diagnostic missing
+from the initial summary, ambiguous wording in one claim, and caveat codes that
+were absent despite correct explanations. These post-run observations do not
+change the frozen scores. The development labels have not received independent
+human adjudication; the earlier description of them as human-authored was inaccurate.
 
 A completed experiment has collected and scored responses; even zero correct
 verdicts is still an honestly completed experiment. CI tests the mechanics. Read
