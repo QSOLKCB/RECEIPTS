@@ -61,7 +61,9 @@ yet received the same integration validation. No shell completion or TUI is incl
 | `verify` | Preservation verifier | Text verification result for the fixed four-model checkpoint |
 | `eval prepare --output DIR` | `receipts.runner --dry-run` | JSON request/input/manifest artifacts; no inference |
 | `eval run --model ID --output DIR --allow-paid` | `receipts.runner` | Paid inference when authorized and credentials are configured |
-| `review report --run DIR --review FILE --output DIR` | `receipts.action_review` | Offline v0.3 consistency checks and aggregation of declared human action judgments |
+| `review report --run DIR --review FILE --output DIR` | `receipts.action_review` | Offline consistency checks and aggregation of declared human action judgments |
+| `experiment prepare --model ID --repeats N --notes FILE --output DIR` | `receipts.experiment` | Freeze a bounded v0.4 repeat design and inspect requests offline |
+| `experiment report --plan FILE --runs FILE --expected-plan-sha256 HEX --output DIR` | `receipts.experiment` | Validate and compare every planned repeat slot offline |
 
 Examples from the checkout root:
 
@@ -100,7 +102,7 @@ budget. Duplicate or unknown evaluation options are rejected before Python start
 Pass flags and values as separate arguments; `--option=value` is not supported
 by the Rust global/evaluation parser.
 
-`--suite v0.1|v0.2|v0.3` selects an allowlisted suite; the default remains `v0.1`.
+`--suite v0.1|v0.2|v0.3|v0.4` selects an allowlisted suite; the default remains `v0.1`.
 All contain 16 cases, so existing call limits apply. For the atomic-claim
 development suite, prepare offline with:
 
@@ -111,13 +113,14 @@ receipts eval prepare --suite v0.2 --output artifacts/prepared-v02
 The [v0.2 contract](../evals/v0.2/README.md) documents its typed claims, distinct
 scoring fields and pending human review. [v0.3](../evals/v0.3/README.md) adds action
 rubrics and review artifacts while reusing the v0.2 verdict scorer. Selecting a
-suite does not enable paid mode.
+suite does not enable paid mode. [v0.4](../evals/v0.4/README.md) adds complex
+evidence cases with the same scorer and action-review schema.
 
 The runner shuffles the suite before taking `--cases`, then shuffles the paired
 calls. Changing the seed can therefore change which cases a reduced run covers,
 as well as their call order. It does not seed model sampling or make responses
 deterministic. The v0.1 manifest key `seed_for_order_only` is retained for format
-compatibility; v0.2/v0.3 use `seed_for_case_selection_and_call_order`. Inspect
+compatibility; v0.2/v0.3/v0.4 use `seed_for_case_selection_and_call_order`. Inspect
 `selected_case_ids` and `call_order` for actual coverage and sequence in every version.
 
 For an explicitly authorized run, with `OPENAI_API_KEY` already supplied through
@@ -141,13 +144,28 @@ accepts `--expected-run-sha256` with 64 lowercase hex characters from a previous
 retained `run-receipt.json`. Duplicate, unknown or incomplete flags are rejected
 before Python starts. The provider key is removed from its environment.
 
-The report validates a terminal v0.3 run and a record-bound review worksheet,
+The report validates a terminal v0.3/v0.4 run and a record-bound review worksheet,
 replays saved scores and summaries, and writes `review.json`, `report.json` and
 `report.md` in a fresh directory outside the run. It never judges recommendations
 automatically or collects their suggested evidence. Success returns 0 and a short
 text message; validation/access/output errors return 2 without echoing untrusted
 input text. See [the full review contract](ACTION_REVIEW.md), including required
 ratings and the limits of unauthenticated reviewer declarations and run digests.
+
+## Offline repeat designs and comparisons
+
+`experiment prepare` requires an explicit model, 2–5 repeats, a design-note file
+and fresh output directory. It freezes all 16 v0.4 cases, both prompts, rubrics,
+source digest/Python version and the seed schedule. Optional seed and output-cap
+flags have the same meanings as evaluation; all cases are included in every repeat.
+There is no `experiment run` command and no paid option in this command family.
+
+`experiment report` requires a frozen plan, complete run index, retained canonical
+plan digest and fresh output outside preserved inputs. It exposes paired outcomes,
+missing observations, failures, descriptive repeat variability and comparability
+warnings. Both operations strip the provider key, preserve literal arguments,
+print short success messages, and return 2 on invalid/incompatible inputs. Read
+[the full experiment contract](EXPERIMENTS.md) before planning any paid run.
 
 ## Automation contract
 

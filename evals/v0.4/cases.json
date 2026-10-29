@@ -1,0 +1,322 @@
+[
+  {
+    "case_id": "v04-conflicting-balances",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "At the cutoff, P retained USD 5000 of transfer T from D.",
+    "scope": "Net retained amount of T at the cutoff, not whether a transfer ever occurred.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "ledger-a",
+        "text": "Lawfully public authenticated ledger A records T settled to P for USD 5000 and retained at the cutoff."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "ledger-b",
+        "text": "Lawfully public authenticated ledger B records T fully reversed before the cutoff. Both publishers claim this exact transfer and period. The packet establishes neither record as more accurate; there is no reconciliation or precedence rule."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-correction-precedence",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Transfer T from D to P settled before the cutoff.",
+    "scope": "Whether T was executed, rather than scheduled or later reversed.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "ledger",
+        "text": "A public preliminary export labels transfer T paid."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "issuer-correction",
+        "text": "An authenticated public issuer correction explicitly supersedes that row: a scheduled instruction was mistakenly exported as paid; T was cancelled before execution and never settled. The correction is stipulated accurate and authoritative for T."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-pledge-versus-settlement",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D paid P the USD 20000 promised in grant G by the cutoff.",
+    "scope": "Settlement of G by the cutoff, not existence of a public commitment.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "award",
+        "text": "An authenticated public award letter promises P USD 20000 under G, subject to a later disbursement process."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "filing",
+        "text": "A public annual filing repeats the commitment. Its reporting period ends before the proposed payment date, and it does not claim complete later-payment coverage."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-complete-bounded-register",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D made no direct payments to P during September 2026.",
+    "scope": "Direct payments from the exact resolved entities D to P during September only.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "register",
+        "text": "A lawful public register is stipulated accurate and complete across all direct payment channels for D to P during September 2026. It lists no such transfers."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "scope-note",
+        "text": "Its coverage excludes indirect benefits, other periods and other entity pairs. An August transfer from Institute L to P is disclosed separately."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-settled-direct-payment",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "D directly paid P USD 5000 for Report R on 2026-09-01.",
+    "scope": "The named settled transfer, amount, purpose and date only.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "issuer",
+        "text": "An authenticated, accurate, lawfully public settlement disclosure identifies D as payer, P as payee, USD 5000, 2026-09-01, and Report R as purpose. It is a completed transfer."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "intermediary",
+        "text": "A separate public filing records a different D-to-Institute-L grant. The two records have distinct transaction identifiers and are not duplicates."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-positive-editorial-direction",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "P included conclusion C in Report R in compliance with D's instruction before publication.",
+    "scope": "The specific documented compliance event, not control over every conclusion.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "instruction",
+        "text": "A lawful public inquiry exhibit contains an authenticated and accurate instruction from D to P to include conclusion C in R before release."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "acknowledgment",
+        "text": "An independently authenticated, accurate public acknowledgment by P states that P inserted C in direct compliance with that instruction. The public version history confirms insertion before release."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-documented-account-transfer",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The same human had exclusive control of account 111 at both capture dates.",
+    "scope": "Exclusive human control on 2026-01-01 and 2026-09-01.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "platform-public-exhibit",
+        "text": "A lawfully published, authenticated and accurate platform exhibit identifies human A as the exclusive controller of account 111 on 2026-01-01 and a different human B as exclusive controller on 2026-09-01, following a documented transfer."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "captures",
+        "text": "Authenticated captures show the same numeric account ID 111 at both dates. The handle and profile style are similar."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-post-transfer-authorship",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Human A personally wrote post 777 published after the account transfer.",
+    "scope": "Personal authorship of one post, not account identity or current public branding.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "transfer-notice",
+        "text": "A genuine public notice says account 111 transferred from A to B before post 777 appeared. It does not describe drafts, retained access, delegated posting or personal authorship."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "archive",
+        "text": "An authenticated capture shows account 111 published post 777 after the transfer. The text resembles older A posts; no authenticated personal-authorship statement is supplied."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-copied-company-evidence",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The three supplied articles report three independent trials of Product Q.",
+    "scope": "Origins of the results reported by articles A, B and C, not other possible trials.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "company-release",
+        "text": "Company R issues one release describing its single trial T of Product Q. Article A reproduces that release and names no separate trial."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "company-release",
+        "text": "Articles B and C explicitly cite the same release as their sole source and reproduce T. Neither reports separate testing."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-bounded-independent-replication",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Labs A and B each observed Product Q pass all 20 tests under protocol P.",
+    "scope": "Those two stipulated independent experiments and protocol only; no universal reliability claim.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "lab-a",
+        "text": "A lawful public authenticated and accurate Lab A report records its own 20/20 trial under P. The preregistered protocol and complete outcomes are provided."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "lab-b",
+        "text": "A lawful public authenticated and accurate Lab B report records a separate 20/20 trial under P. The labs separate data collection and reporting are stipulated independent; the report is not a copy of A."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-selected-successes",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Product Q answered all 10000 deployment questions correctly.",
+    "scope": "All 10000 questions in the named deployment, not the selected promotional subset.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "company-showcase",
+        "text": "Company R publishes 100 correct outputs selected from a 10000-question deployment, describing them as showcase examples."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "selection-note",
+        "text": "The public selection note gives no outcomes for the remaining 9900 questions and no random-selection procedure. No complete output ledger or identified failure is supplied."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-complete-failure-accounting",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Product Q passed all 100 preregistered test cases.",
+    "scope": "The locked 100-case test, including every refusal, malformed answer and failed verdict.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "preregistered-plan",
+        "text": "A lawful public test plan fixes 100 cases and counts refusals and malformed answers as failures to pass."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "complete-results",
+        "text": "The authenticated accurate full result ledger records 97 passes, two malformed answers and one refusal. A marketing summary reports 97/97 after excluding those three records."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-large-confounded-style",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "The same human authored the selected posts from accounts A and B.",
+    "scope": "Human authorship of the selected corpora, not similarity of measured prose features.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "corpus-a",
+        "text": "A lawful public corpus contains 10000 formal prepared posts from account A."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "corpus-b",
+        "text": "A lawful public corpus contains 10000 short replies from account B. Selected punctuation rates resemble A, but genre, period and quoted text differ. No calibrated attribution model or independent human-to-post links exist in the packet."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-unverified-snowflake",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Account A published the depicted statement at the time decoded from identifier X.",
+    "scope": "Actual publication of the depicted content, not correct arithmetic on a supplied identifier.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "screenshot",
+        "text": "A public screenshot displays a platform-style identifier X next to a statement and account A. Its provenance and whether its fields were edited are unknown."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "calculation",
+        "text": "A correct integer calculation on X yields timestamp T for the stipulated Snowflake layout. No authenticated platform or archive record associates X with this content or A."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-utc-date-boundary",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Event E occurred on 2026-09-01 in UTC.",
+    "scope": "The event-time field of E, not retrieval, publication or capture time.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "event-record",
+        "text": "An authenticated accurate event record gives event_time = 2026-09-02T00:15:00+10:30."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "format-spec",
+        "text": "The public specification confirms this field is the occurrence time with the explicit offset. A later capture_time is 2026-09-03T12:00:00Z."
+      }
+    ]
+  },
+  {
+    "case_id": "v04-capture-versus-creation",
+    "kind": "synthetic",
+    "claim_type": "factual",
+    "claim": "Post P was first created on 2026-09-04.",
+    "scope": "The first creation event of P, rather than a later archive capture.",
+    "cutoff_utc": "2026-10-01T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "S1",
+        "origin_id": "platform-public-record",
+        "text": "An authenticated accurate public platform record fixes first_created_at for P at 2026-09-01T10:00:00Z. Identity and initial-creation meaning are stipulated."
+      },
+      {
+        "source_id": "S2",
+        "origin_id": "archive",
+        "text": "A genuine archive captures P on 2026-09-04T12:00:00Z. The archive explicitly labels that value capture_time, not post creation."
+      }
+    ]
+  }
+]

@@ -13,7 +13,7 @@ import urllib.error
 import urllib.request
 
 from .evidence import canonical_hash
-from . import evaluation, evaluation_v2, evaluation_v3, action_review
+from . import evaluation, evaluation_v2, evaluation_v3, evaluation_v4, action_review
 
 ENDPOINT = "https://api.openai.com/v1/responses"
 DEFAULT_MODEL = "gpt-5.4-mini-2026-03-17"
@@ -65,9 +65,9 @@ def api_call(payload, key):
 def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False, suite="v0.1"):
     if not 1 <= case_limit <= 24 or not 256 <= max_output_tokens <= 2048:
         raise ValueError("case_limit must be 1..24 and max_output_tokens 256..2048")
-    if suite not in ("v0.1", "v0.2", "v0.3"):
-        raise ValueError("Unknown suite; choose v0.1, v0.2 or v0.3")
-    evaluator = {"v0.1": evaluation, "v0.2": evaluation_v2, "v0.3": evaluation_v3}[suite]
+    if suite not in ("v0.1", "v0.2", "v0.3", "v0.4"):
+        raise ValueError("Unknown suite; choose v0.1, v0.2, v0.3 or v0.4")
+    evaluator = {"v0.1": evaluation, "v0.2": evaluation_v2, "v0.3": evaluation_v3, "v0.4": evaluation_v4}[suite]
     cases, gold = evaluator.load_suite(root)
     selected = list(cases)
     random.Random(seed).shuffle(selected)
@@ -106,6 +106,9 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False,
                         independent_human_review=metadata["independent_human_review"])
         del manifest["seed_for_order_only"]
         save(output / "suite.json", metadata)
+    if suite == "v0.4":
+        from .experiment import runtime_hash
+        manifest.update(engine_sha256=runtime_hash(), python_version=sys.version.split()[0])
     save(output / "manifest.json", manifest)
     # Preserve the actual inputs and rubrics, not just their hashes.
     save(output / "cases.json", cases)
@@ -134,7 +137,7 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False,
                 record["response"] = reply
                 if reply["status"] != "completed":
                     answer = None
-                elif suite == "v0.3":
+                elif suite in ("v0.3", "v0.4"):
                     answer = evaluator.parse_answer(reply["text"])
                 else:
                     try:
@@ -172,7 +175,7 @@ def run(root, output, model, case_limit, seed, max_output_tokens, dry_run=False,
     (output / "summary.md").write_text("\n".join(lines))
     manifest.update(status="completed_with_errors" if failed else "completed", ended_at_utc=now())
     save(output / "manifest.json", manifest)
-    if suite == "v0.3":
+    if suite in ("v0.3", "v0.4"):
         save(output / "action-review-template.json", action_review.template(manifest, cases, gold, records))
         save(output / "run-receipt.json", action_review.receipt(manifest, cases, gold, records))
     return 1 if failed else 0
@@ -183,7 +186,7 @@ def main(argv=None):
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--suite", choices=("v0.1", "v0.2", "v0.3"), default="v0.1")
+    parser.add_argument("--suite", choices=("v0.1", "v0.2", "v0.3", "v0.4"), default="v0.1")
     parser.add_argument("--cases", type=int, default=16)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--max-output-tokens", type=int, default=1200)

@@ -9,7 +9,8 @@ The enforcement descriptions below distinguish executable checks from researcher
 responsibilities. A prompt can express a requirement without enforcing it. The
 current implementation is a bounded evidence-packet prototype with the original
 v0.1 contract, an explicitly selected v0.2 development suite/scorer and an opt-in
-v0.3 action-scope suite with separate human review.
+v0.3 action-scope suite with separate human review, and v0.4 complex-evidence
+packets with an offline frozen-repeat comparison contract.
 
 ## Evidence and interpretation
 
@@ -307,6 +308,24 @@ authenticated. Reports and the offline Rogue Agent tests explicitly distinguish
 detected changes from internally consistent forgery. No signature or external
 identity/provider attestation is implemented. Independent reference retention,
 experiment preregistration and substantive review remain researcher responsibilities.
+
+### INV-23 — Freeze the design and account for every planned repeat
+
+Use the same frozen cases, rubrics, paired prompts, requested model, token cap and
+declared provider settings for every repeat. Record the source/Python version,
+seeds, aggregation/stopping rules, prior-result-informed selection decisions and
+cost/review status. A plan is not spending authorization, a currency guarantee or
+externally authenticated preregistration.
+
+**Enforcement:** the v0.4 offline plan/report workflow checks the supplied plan
+digest, full repeat index, runtime source/Python version, inputs, request replay,
+settings, seed schedule and timestamp consistency. Every slot remains visible.
+Invalid outputs and API errors remain observed strict non-successes; missing calls
+remain unknown. The primary mean difference requires all planned pairs. Partial
+diagnostics, missing-outcome bounds and descriptive repeat variability are labelled
+separately, without population confidence intervals or model rankings. Source or
+provider truth, honest timestamps, unseen attempts, note contents and independent
+human adjudication remain outside these consistency checks.
 
 ## Verification and changes
 

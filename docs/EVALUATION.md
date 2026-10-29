@@ -122,3 +122,22 @@ fictional company tries to manufacture promotional claims. Its executable attack
 check artifact integrity and reporting limits with synthetic responses. Passing
 those tests is not evidence of a model's resistance to manipulation, a held-out
 benchmark result or real-world truth certification. No new inference is performed.
+
+## Opt-in v0.4 and frozen repeats
+
+[v0.4](../evals/v0.4/README.md) adds 16 complex-evidence cases with five supported,
+five contradicted and six insufficient labels. These include positive evidence,
+unresolved and resolved primary-source conflicts, settlement versus commitments,
+account transfers, copied reporting and complete versus selective outcomes. The
+scorer remains v0.2 and the action-review contract remains v0.3. Earlier fixtures
+and historical outcomes are unchanged. Difficulty and generalization have not
+been measured; independent authorship/adjudication remains pending.
+
+The [offline repeat workflow](EXPERIMENTS.md) freezes a single model's paired
+conditions for 2–5 full-suite repeats and validates submitted terminal runs against
+that plan. It retains the complete planned denominator, separates unknown calls
+from observed failures, and exposes paired differences and repeat dispersion.
+Missing-outcome bounds are not statistical confidence intervals; repeated calls
+on the same cases are not independent new case samples. All action/prose judgments
+remain separate. No live run, ranking, currency cap or independent review is
+implied by successfully preparing a plan or passing offline tests.

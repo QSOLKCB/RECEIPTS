@@ -122,6 +122,16 @@ evidence, independent review, a trust badge or model-performance claims.
 
 ## Implementation and verification
 
+For v0.4 and repeated comparisons read [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md)
+and [evals/v0.4/README.md](evals/v0.4/README.md). Keep v0.1–v0.3 fixtures and scorers
+unchanged. Freeze actual inputs, policies, code/Python version and repeat slots
+before observations; retain selection/cost/review notes honestly. Offline plan
+creation does not authorize inference or establish external preregistration.
+Never drop a missing repeat, reuse a run for another slot or promote observed-only
+subsets as the complete experiment. Unknown calls remain unknown; missing-outcome
+bounds and repeat dispersion are not population confidence intervals. Source hashes,
+timestamps and notes are consistency declarations, not authenticated provenance.
+
 The evidence runtime uses Python 3.10+ and the standard library. The Rust CLI
 uses only the standard library and delegates to that runtime; read
 [docs/CLI.md](docs/CLI.md) before changing the control surface. Keep deterministic metadata
@@ -163,6 +173,7 @@ For request/runner changes also prepare a dry run in a fresh output directory:
 PYTHONPATH=src python -m receipts.runner --dry-run --output artifacts/review-dry-run
 PYTHONPATH=src python -m receipts.runner --suite v0.2 --dry-run --output artifacts/review-dry-run-v02
 PYTHONPATH=src python -m receipts.runner --suite v0.3 --dry-run --output artifacts/review-dry-run-v03
+PYTHONPATH=src python -m receipts.runner --suite v0.4 --dry-run --output artifacts/review-dry-run-v04
 ```
 
 For action-review or adversarial-integrity changes, also run optimized checks:
@@ -170,6 +181,7 @@ For action-review or adversarial-integrity changes, also run optimized checks:
 ```bash
 PYTHONPATH=src python -O -m unittest discover -s tests -p test_action_review.py -v
 PYTHONPATH=src python -O -m unittest discover -s tests -p test_rogue_agent.py -v
+PYTHONPATH=src python -O -m unittest discover -s tests -p test_experiment.py -v
 ```
 
 Never overwrite an existing output directory. Add focused tests for meaningful
