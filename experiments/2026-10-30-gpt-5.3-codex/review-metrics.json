@@ -1,0 +1,61 @@
+{
+  "github_run_id": 40903696290,
+  "github_attempt": 1,
+  "artifact_id": 12909429526,
+  "artifact_zip_sha256": "9aa56e2554732ff0829b240ef9ec8d1faed83f913ca4237156c78b1782b01619",
+  "source_commit": "6a995e85b4855a4716c4bc9104e7504b48c752b6",
+  "review_date_adelaide": "2026-10-30",
+  "pricing_url": "https://developers.openai.com/api/docs/models/gpt-5.3-codex",
+  "usd_per_million_tokens": {
+    "uncached_input": "1.75",
+    "cached_input": "0.175",
+    "output": "14"
+  },
+  "billing_status": "Estimate from response usage and published standard rates; not verified against billing dashboard.",
+  "provider_returned_models": [
+    "gpt-5.3-codex"
+  ],
+  "variants": {
+    "baseline": {
+      "input_tokens": 8987,
+      "output_tokens": 2400,
+      "total_tokens": 11387,
+      "cached_input_tokens": 0,
+      "reasoning_tokens": 0,
+      "estimated_usd": "0.04932725",
+      "record_status_counts": {
+        "scored": 16
+      },
+      "provider_status_counts": {
+        "completed": 16
+      },
+      "mismatches_or_invalid": [
+        "money-not-direction"
+      ],
+      "unsupported_contradiction_against_frozen_gold_valid_only": 1,
+      "verdict_text_correct_including_invalid_ids": 15
+    },
+    "receipts": {
+      "input_tokens": 16971,
+      "output_tokens": 2520,
+      "total_tokens": 19491,
+      "cached_input_tokens": 0,
+      "reasoning_tokens": 0,
+      "estimated_usd": "0.06497925",
+      "record_status_counts": {
+        "scored": 16
+      },
+      "provider_status_counts": {
+        "completed": 16
+      },
+      "mismatches_or_invalid": [],
+      "unsupported_contradiction_against_frozen_gold_valid_only": 0,
+      "verdict_text_correct_including_invalid_ids": 16
+    }
+  },
+  "total_estimated_usd": "0.11430650",
+  "post_run_diagnostics": [
+    "unsupported_contradiction_against_frozen_gold_valid_only",
+    "verdict_text_correct_including_invalid_ids"
+  ]
+}

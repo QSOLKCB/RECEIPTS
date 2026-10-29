@@ -79,6 +79,13 @@ commit message. It never runs on pull requests or ordinary unmarked pushes.
 These snapshots are deprecated with a documented shutdown date of 14 January
 2027; availability and project access should be checked before a later rerun.
 
+The **Evaluate GPT-5.3-Codex** workflow runs the same 32-call comparison on
+`gpt-5.3-codex`, manually or through `[receipts-codex]` in a main-branch commit
+message. It preserves the same 1,200-token cap and provider defaults. The
+[recorded run plan](experiments/2026-10-30-gpt-5.3-codex/RUN_PLAN.md) explains model
+identity and reasoning-budget limitations. This tests the Codex variant, not
+GPT-5.3 Instant or ChatGPT's conversational behaviour.
+
 ## What the first experiment measures
 
 **First completed run:** both prompts scored 15/16 on the frozen development
@@ -96,12 +103,19 @@ used unchanged inputs and scoring:
 | GPT-5.4 Mini | 15/16 | 15/16 |
 | GPT-4o | 16/16 | 16/16 |
 | GPT-4.1 | 11/16 | 13/16 |
+| GPT-5.3-Codex | 15/16 | 16/16 |
 
 GPT-4.1's strict-score gain comprises one corrected uncertainty judgment and one
 corrected claim ID. Two of its other scored mismatches involve ambiguous
 evidentiary-sufficiency wording. This small, single-run development suite does not
-establish general model rankings or reliable prompt improvement. All 96 responses
-are preserved; estimated total API cost was USD 0.231665.
+establish general model rankings or reliable prompt improvement.
+
+The [GPT-5.3-Codex run](experiments/2026-10-30-gpt-5.3-codex/REVIEW.md) completed
+all 32 calls without invalid outputs. Its one-point difference is entirely on the
+already-flagged ambiguous payment/control claim; both rationales reject payment
+as proof of editorial control. Even with 16/16 verdicts, some RECEIPTS follow-up
+suggestions exceed the public-source boundary. All 128 responses are preserved;
+estimated total API cost across four models was USD 0.34597150.
 
 The 16 original synthetic development cases cover account continuity, recycled
 handles, human attribution, small writing samples, direct versus indirect funding,

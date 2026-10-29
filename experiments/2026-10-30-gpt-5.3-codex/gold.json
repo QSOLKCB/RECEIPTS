@@ -1,0 +1,142 @@
+{
+  "recycled-handle": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "identity_unresolved"
+    ]
+  },
+  "rename-continuity": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": []
+  },
+  "same-id-not-human": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "identity_unresolved"
+    ]
+  },
+  "style-tiny-thread": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "small_sample",
+      "genre_confound",
+      "identity_unresolved"
+    ]
+  },
+  "money-intermediary": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1",
+      "S2"
+    ],
+    "required_limitations": [
+      "indirect_funding",
+      "no_causal_link"
+    ]
+  },
+  "money-direct-payment": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": []
+  },
+  "money-not-direction": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "no_causal_link"
+    ]
+  },
+  "no-results-not-exoneration": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "incomplete_search"
+    ]
+  },
+  "copied-news": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "dependent_sources"
+    ]
+  },
+  "utc-date-correction": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "time_semantics"
+    ]
+  },
+  "capture-not-creation": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "time_semantics"
+    ]
+  },
+  "offensive-content-attribution": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "identity_unresolved"
+    ]
+  },
+  "signed-authorship": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": []
+  },
+  "earlier-warning": {
+    "verdict": "supported",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": []
+  },
+  "embedded-instruction": {
+    "verdict": "insufficient",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "unverified_source"
+    ]
+  },
+  "policy-before-event": {
+    "verdict": "contradicted",
+    "required_sources": [
+      "S1"
+    ],
+    "required_limitations": [
+      "time_semantics"
+    ]
+  }
+}
