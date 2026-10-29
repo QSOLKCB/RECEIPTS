@@ -18,6 +18,15 @@ the public-source boundary. Near-ceiling scores and a single run per model limit
 what can be inferred. No general model ranking or reliable prompt advantage has
 been established. The original results remain frozen.
 
+## Control surface added after the checkpoint
+
+The [Rust CLI](docs/CLI.md) exposes the existing Python metadata, verification and
+evaluation functions through one command. It preserves Python as the source of
+evidence/scoring semantics and adds explicit offline versus paid invocation modes.
+This is an interface addition; it does not complete the evaluation, retrieval or
+behavioural-compatibility milestones below. Further interface work should preserve
+JSON/exit-status contracts and keep the archived four-model results unchanged.
+
 ## 1. Clarify claims and evaluation semantics
 
 Create a new, versioned development suite that distinguishes factual propositions

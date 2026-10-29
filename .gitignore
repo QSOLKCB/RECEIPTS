@@ -6,3 +6,6 @@ __pycache__/
 artifacts/
 captures/
 *.egg-info/
+
+# Rust build output; Cargo.lock is tracked.
+/target/

@@ -1,0 +1,15 @@
+[package]
+name = "receipts-cli"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+description = "Rust control surface for the RECEIPTS Python evidence-audit harness"
+repository = "https://github.com/QSOLKCB/RECEIPTS"
+publish = false
+
+[[bin]]
+name = "receipts"
+path = "cli/src/main.rs"
+
+[dependencies]

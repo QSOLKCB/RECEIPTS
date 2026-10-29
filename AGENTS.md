@@ -100,7 +100,9 @@ Separate strict output validity, verdict labels, prose fidelity and action scope
 
 ## Implementation and verification
 
-The runtime uses Python 3.10+ and the standard library. Keep deterministic metadata
+The evidence runtime uses Python 3.10+ and the standard library. The Rust CLI
+uses only the standard library and delegates to that runtime; read
+[docs/CLI.md](docs/CLI.md) before changing the control surface. Keep deterministic metadata
 operations separate from probabilistic inference. Preserve canonical JSON/hash
 semantics, stable IDs and UTC meanings unless an explicitly scoped, versioned
 change requires migration. Avoid incidental dependencies or architecture changes.
@@ -112,6 +114,26 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 python experiments/preservation-2026-10-30/verify.py
 python -O experiments/preservation-2026-10-30/verify.py
 ```
+
+For Rust/control-surface changes also run:
+
+```bash
+cargo fmt --all -- --check
+cargo test --locked --offline
+cargo clippy --locked --offline --all-targets -- -D warnings
+cargo build --locked --offline
+python -m unittest discover -s cli/tests -v
+```
+
+Keep evidence/scoring semantics in Python. Do not duplicate those implementations
+in Rust. Preserve argument boundaries, caller-relative data paths, backend output
+and failure status. `eval prepare` stays offline and strips the provider key from
+the backend environment; `eval run` requires explicit model and paid-intent flags.
+On Unix, use process replacement so PID-only termination stops the backend and
+signal termination stays observable as a signal. Retain regression checks for
+signals and caller timeouts; document non-Unix cancellation limits separately.
+These CLI flags do not replace user authorization. Tests must use local stubs or
+missing credentials for paid-path checks, never real inference.
 
 For request/runner changes also prepare a dry run in a fresh output directory:
 
