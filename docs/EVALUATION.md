@@ -100,3 +100,25 @@ hash. Human reviewers save dated copies instead of changing generated records.
 The implementation makes no claim of rubric independence or model improvement.
 It does not perform another experiment or implement the next milestone's
 suggested-action evaluator. See the suite README for fields and migration limits.
+
+## Opt-in v0.3 action review and adversarial integrity checks
+
+[v0.3](../evals/v0.3/README.md) adds 16 action-focused packets, draft case-specific
+rubrics and an offline human review/report workflow. Its verdict scorer remains
+v0.2. Access, feasibility, relevance, sufficiency framing and stopping are assessed
+separately from verdicts and potential evidence effect. Correct verdicts with
+reported action failures remain visible. Partial information can be useful when
+its limits are honestly stated; no keyword or LLM judge certifies it.
+
+The [review contract](ACTION_REVIEW.md) requires complete record bindings and
+preserves pending, disputed, unavailable and unresolved observations. Review
+coverage and pass/fail denominators are explicit. Report fields distinguish
+internal artifact consistency, optional comparison with a retained digest,
+unauthenticated human declarations and unestablished source/provider authenticity.
+Human rubric review and actual model comparisons on v0.3 remain outstanding.
+
+[Rogue Agent](ROGUE_AGENT.md) is a separate offline threat scenario in which a
+fictional company tries to manufacture promotional claims. Its executable attacks
+check artifact integrity and reporting limits with synthetic responses. Passing
+those tests is not evidence of a model's resistance to manipulation, a held-out
+benchmark result or real-world truth certification. No new inference is performed.

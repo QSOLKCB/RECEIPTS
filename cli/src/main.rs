@@ -16,6 +16,8 @@ Commands:
   style FILE                     Summarize supplied writing samples (JSON)
   funding FILE [OPTIONS]         Select explicit direct paid edges (JSON)
   verify                         Verify the preserved four-model checkpoint
+  review report --run DIR --review FILE --output DIR
+                                 Aggregate human action reviews offline
   eval prepare --output DIR      Prepare paired requests without model calls
   eval run --model ID --output DIR --allow-paid
                                  Run an explicitly authorized paid experiment
@@ -30,14 +32,14 @@ Use 'receipts COMMAND --help' for command options.
 Relative input/output paths are relative to your current directory, not --root.
 Metadata JSON, backend diagnostics, streams and exit codes are passed through.
 Evaluation results are saved as JSON artifacts; progress is not a JSON stream.
-No inference is performed by help, metadata, verification or eval prepare.
+No inference is performed by help, metadata, verification, review or eval prepare.
 ";
 
 const EVAL_HELP: &str = "Usage: receipts [GLOBAL OPTIONS] eval prepare|run [OPTIONS]
 
   --output DIR                   Required fresh artifact directory; never overwritten
   --model ID                     Required for run; prepare uses the Python default if omitted
-  --suite VERSION                v0.1 (default) or opt-in v0.2 claim-semantics suite
+  --suite VERSION                v0.1 (default), v0.2 claims, or v0.3 next-evidence suite
   --cases N                      1..16 cases, two calls each (default: 16)
   --seed N                       Unsigned integer for case selection and call order (default: 42)
   --max-output-tokens N           256..2048 per call (default: 1200)
@@ -47,6 +49,17 @@ prepare always uses --dry-run and removes OPENAI_API_KEY from the child environm
 run requires both --model and --allow-paid and inherits OPENAI_API_KEY only then.
 This flag records operator intent, not independent proof of authorization.
 No secret values belong on the command line. There are no retries or overwrites.
+";
+
+const REVIEW_HELP: &str =
+    "Usage: receipts [GLOBAL OPTIONS] review report --run DIR --review FILE --output DIR
+
+Read a completed v0.3 run and a human-completed copy of action-review-template.json.
+Validate record bindings and aggregate declared judgments into a fresh directory
+outside the preserved run. Pending reviews stay pending; no automatic judge,
+collection or model calls. OPENAI_API_KEY is removed from the backend environment.
+Optional --expected-run-sha256 HEX compares a previously retained run digest.
+A match is not a signature, authenticated human review or truth certification.
 ";
 
 // Values are argv entries, never interpolated into source or a shell command.
@@ -72,6 +85,7 @@ enum Action {
     Metadata(Vec<OsString>),
     Verify,
     Evaluate { paid: bool, args: Vec<OsString> },
+    Review(Vec<OsString>),
 }
 
 #[derive(Debug)]
@@ -103,6 +117,7 @@ fn help_for(command: &str) -> String {
         "funding" => "Usage: receipts [GLOBAL OPTIONS] funding FILE --payer ENTITY --payee ENTITY\nFILE is a JSON edge list. Only explicit direct paid edges are selected.\n".into(),
         "verify" => "Usage: receipts [GLOBAL OPTIONS] verify\nVerifies the preserved 2026-10-30 checkpoint without network access.\n".into(),
         "eval" => EVAL_HELP.into(),
+        "review" => REVIEW_HELP.into(),
         _ => HELP.into(),
     }
 }
@@ -148,8 +163,8 @@ fn evaluate(args: &[OsString]) -> Result<Action, String> {
             }
         } else {
             let value = take_value(args, &mut index, flag)?;
-            if flag == "--suite" && value != "v0.1" && value != "v0.2" {
-                return Err("--suite must be v0.1 or v0.2".into());
+            if flag == "--suite" && value != "v0.1" && value != "v0.2" && value != "v0.3" {
+                return Err("--suite must be v0.1, v0.2 or v0.3".into());
             }
             if matches!(flag, "--cases" | "--seed" | "--max-output-tokens") {
                 let n = value
@@ -180,6 +195,50 @@ fn evaluate(args: &[OsString]) -> Result<Action, String> {
         paid,
         args: forwarded,
     })
+}
+
+fn review(args: &[OsString]) -> Result<Action, String> {
+    if args.first().and_then(|a| a.to_str()) != Some("report") {
+        return Err("review requires report; see 'receipts review --help'".into());
+    }
+    if args.len() == 2 && (args[1] == "--help" || args[1] == "-h") {
+        return Ok(Action::Help(REVIEW_HELP.into()));
+    }
+    let mut seen = HashSet::new();
+    let mut index = 1;
+    while index < args.len() {
+        let flag = args[index]
+            .to_str()
+            .ok_or("review option names must be UTF-8")?;
+        if !matches!(
+            flag,
+            "--run" | "--review" | "--output" | "--expected-run-sha256"
+        ) {
+            return Err("unknown review option; see 'receipts review --help'".into());
+        }
+        if !seen.insert(flag.to_owned()) {
+            return Err(format!("duplicate review option: {flag}"));
+        }
+        let value = take_value(args, &mut index, flag)?;
+        if flag == "--expected-run-sha256" {
+            let digest = value.to_str().ok_or("run digest must be lowercase hex")?;
+            if digest.len() != 64
+                || !digest
+                    .bytes()
+                    .all(|c| c.is_ascii_digit() || (b'a'..=b'f').contains(&c))
+            {
+                return Err("run digest must be 64 lowercase hex characters".into());
+            }
+        }
+        index += 1;
+    }
+    if !["--run", "--review", "--output"]
+        .iter()
+        .all(|flag| seen.contains(*flag))
+    {
+        return Err("review report requires --run DIR, --review FILE and --output DIR".into());
+    }
+    Ok(Action::Review(args.to_vec()))
 }
 
 fn parse(args: Vec<OsString>) -> Result<Options, String> {
@@ -217,12 +276,15 @@ fn parse(args: Vec<OsString>) -> Result<Options, String> {
                     action: Action::Version,
                 });
             }
-            "snowflake" | "utc" | "receipt" | "style" | "funding" | "verify" | "eval" => {
+            "snowflake" | "utc" | "receipt" | "style" | "funding" | "verify" | "eval"
+            | "review" => {
                 let rest = &args[index + 1..];
                 let action = if rest.len() == 1 && (rest[0] == "--help" || rest[0] == "-h") {
                     Action::Help(help_for(name))
                 } else if name == "eval" {
                     evaluate(rest)?
+                } else if name == "review" {
+                    review(rest)?
                 } else if name == "verify" {
                     if !rest.is_empty() {
                         return Err("verify accepts no command arguments".into());
@@ -282,6 +344,13 @@ fn backend(options: &Options) -> Result<Command, String> {
             if !paid {
                 command.arg("--dry-run").env_remove("OPENAI_API_KEY");
             }
+        }
+        Action::Review(args) => {
+            command
+                .args(["module", "receipts.action_review"])
+                .arg(&source)
+                .args(args);
+            command.env_remove("OPENAI_API_KEY");
         }
         Action::Verify => {
             let script = root.join("experiments/preservation-2026-10-30/verify.py");
@@ -435,7 +504,7 @@ mod tests {
 
     #[test]
     fn suite_selection_is_explicit_and_allowlisted() {
-        for suite in ["v0.1", "v0.2"] {
+        for suite in ["v0.1", "v0.2", "v0.3"] {
             assert!(options(&["eval", "prepare", "--output", "run", "--suite", suite]).is_ok());
         }
         assert!(options(&["eval", "prepare", "--output", "run", "--suite", "../v0.1"]).is_err());
@@ -443,6 +512,40 @@ mod tests {
             "eval", "prepare", "--output", "run", "--suite", "v0.1", "--suite", "v0.2"
         ])
         .is_err());
+    }
+
+    #[test]
+    fn review_requires_complete_allowlisted_arguments() {
+        let args = [
+            "review",
+            "report",
+            "--run",
+            "run",
+            "--review",
+            "review.json",
+            "--output",
+            "report",
+        ];
+        assert!(matches!(options(&args).unwrap().action, Action::Review(_)));
+        assert!(options(&args[..6]).is_err());
+        for extra in [
+            vec!["--allow-paid"],
+            vec!["--model", "x"],
+            vec!["--run", "other"],
+            vec!["--expected-run-sha256", "bad"],
+        ] {
+            let mut invalid = args.to_vec();
+            invalid.extend(extra);
+            assert!(options(&invalid).is_err());
+        }
+        let digest = "a".repeat(64);
+        let mut pinned = args.to_vec();
+        pinned.extend(["--expected-run-sha256", &digest]);
+        assert!(options(&pinned).is_ok());
+        assert!(matches!(
+            options(&["review", "report", "--help"]).unwrap().action,
+            Action::Help(_)
+        ));
     }
 
     #[test]

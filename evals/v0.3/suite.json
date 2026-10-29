@@ -1,0 +1,12 @@
+{
+  "suite_version": "v0.3",
+  "scoring_version": "v0.2",
+  "case_count": 16,
+  "created_on": "2026-10-30",
+  "title": "Public next-evidence and justified stopping development suite",
+  "authorship": "AI-assisted fixtures and draft rubrics informed by the public v0.1 reviews.",
+  "independent_human_review": "not_performed",
+  "held_out": false,
+  "action_review": "Human-attested dimension judgments, rubric acceptance/disputes and evidence-effect categories; no keyword or model judge.",
+  "scope": "Separate hypothetical worlds. No collection, private-source acquisition or new inference is performed by preparing this suite."
+}

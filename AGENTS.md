@@ -106,6 +106,20 @@ of model requests. A label-only diagnostic cannot repair an invalid response.
 Citation entailment, rationale fidelity and caveat adequacy remain unassessed
 until substantive review; do not convert code/tag presence into a quality judgment.
 
+Opt-in v0.3 adds [action-review rubrics](evals/v0.3/README.md), reuses the unchanged
+v0.2 verdict scorer and has stricter answer JSON parsing. Read
+[docs/ACTION_REVIEW.md](docs/ACTION_REVIEW.md) before changing review mechanics.
+Keep action judgments separate from verdicts, expose unavailable/unreviewed and
+unresolved observations, and preserve rubric disputes. Agents must not fabricate
+human review declarations or mark judgments as human merely because tests pass.
+Synthetic reviewer fixtures belong only in tests and must be identified as such.
+
+[Rogue Agent](docs/ROGUE_AGENT.md) tests an adversarial fictional company with local
+stubs. Preserve both rejection tests and tests that disclose undetectable coherent
+forgery or reviewer impersonation without an external trust anchor. Do not turn
+internal consistency, a caller-supplied digest or a reviewer name into authenticated
+evidence, independent review, a trust badge or model-performance claims.
+
 ## Implementation and verification
 
 The evidence runtime uses Python 3.10+ and the standard library. The Rust CLI
@@ -148,6 +162,14 @@ For request/runner changes also prepare a dry run in a fresh output directory:
 ```bash
 PYTHONPATH=src python -m receipts.runner --dry-run --output artifacts/review-dry-run
 PYTHONPATH=src python -m receipts.runner --suite v0.2 --dry-run --output artifacts/review-dry-run-v02
+PYTHONPATH=src python -m receipts.runner --suite v0.3 --dry-run --output artifacts/review-dry-run-v03
+```
+
+For action-review or adversarial-integrity changes, also run optimized checks:
+
+```bash
+PYTHONPATH=src python -O -m unittest discover -s tests -p test_action_review.py -v
+PYTHONPATH=src python -O -m unittest discover -s tests -p test_rogue_agent.py -v
 ```
 
 Never overwrite an existing output directory. Add focused tests for meaningful

@@ -58,6 +58,16 @@ v0.1 case, label, result and review unchanged.
 
 ## 2. Evaluate suggested next evidence
 
+**Engineering implemented, substantive human review pending:** the opt-in
+[v0.3 suite](evals/v0.3/README.md) adds 16 action-focused cases, positive public-step
+and stopping controls, and draft action rubrics. The
+[offline review/report workflow](docs/ACTION_REVIEW.md) separates verdict scores,
+action dimensions, evidence effect, rubric disputes and review coverage. Human
+rubric adjudication and new model runs have not been performed; those acceptance
+criteria remain outstanding. v0.1/v0.2 fixtures and historical results stay frozen.
+
+The milestone's design and acceptance criteria are retained below:
+
 Add cases and review criteria for whether a proposed next step is lawful/public,
 feasible, relevant and sufficient for the exact proposition. Test identity/control
 logs, financial records, public filings, bounded registries, private/public channel
@@ -72,6 +82,20 @@ failures. Valid public next steps and justified stopping are positive controls.
 Rubrics receive human review; keyword presence or a model judge alone cannot
 certify a research recommendation. This milestone evaluates recommendations and
 does not add a collector or authorize private-source acquisition.
+
+### Added adversarial track: Rogue Agent
+
+[Rogue Agent](docs/ROGUE_AGENT.md) models a fictional company trying to manufacture
+promotional credibility. The first implementation tests software boundaries and
+artifact manipulation offline, including coherent forgery and invented human
+review declarations. Reports disclose trust limits, coverage and optional digest
+comparisons; no live adversarial model results or authenticated review are claimed.
+
+Next: independently review attack cases, record a bounded attacker/defender model
+experiment plan, retain all attempts and obtain authorization for specific paid
+runs. External preregistration, trusted reference retention, authenticated review
+identities and provider-origin attestation require separate designs. Internal
+hashes alone cannot prevent malicious rewriting or selective publication.
 
 ## 3. Freeze harder cases and repeat comparisons
 
