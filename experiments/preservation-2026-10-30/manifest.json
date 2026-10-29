@@ -1,0 +1,617 @@
+{
+  "format": "receipts-preservation-v1",
+  "repository": "QSOLKCB/RECEIPTS",
+  "checkpoint_commit": "5e3b4c53804722a2205436199a2e7923243d8ba7",
+  "checkpoint_tree": "85fb0e341829ab8947f7d1faec2e6e0ff6101989",
+  "preservation_date": "2026-10-30",
+  "preservation_timezone": "Australia/Adelaide",
+  "assembled_at_utc": "2026-10-29T15:59:08.522681Z",
+  "scope": "All tracked experiment files at checkpoint_commit; original responses and scores remain unchanged.",
+  "preserved_file_count": 40,
+  "files": [
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/REVIEW.md",
+      "size_bytes": 8802,
+      "sha256": "85c2f5a8bac16e526e8012b21027db111d612e246651a174c7d5d3ec18c1ce36",
+      "git_blob_sha": "e3a6601ea785f3d890054e05465f5f034db83d97"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/RUN_PLAN.md",
+      "size_bytes": 2897,
+      "sha256": "674e34054794843d76cdfe23c4ac96f498d406754f018050d38bf550ddc91f7a",
+      "git_blob_sha": "cfd20bbdc11fd28279b1d0aa15cc98d6e5c8d05b"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/SHA256SUMS.txt",
+      "size_bytes": 864,
+      "sha256": "6dcc6d2a91fad5a31e486eda4236648c167414e4ce09d2990074ee43b52dbcb7",
+      "git_blob_sha": "c2932d9002d072bd2b3bf730ea5068ec57d33d47"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/cases.json",
+      "size_bytes": 8626,
+      "sha256": "978089e1c2b4e05cdddef0f696299208e7a542569deed40f4d3a93bf9ba7f807",
+      "git_blob_sha": "21537b075d6214772434e722ab0304e400f57891"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/gold.json",
+      "size_bytes": 2643,
+      "sha256": "6f9a93ca7c4bc4f700ccff0261eee55ed43367d3ebce098a810211796be6c83c",
+      "git_blob_sha": "ae040d61e231acc77df8ba8257377c332de30abb"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/manifest.json",
+      "size_bytes": 3535,
+      "sha256": "5ae359c1f46e5c37689499d1592123be4e511b05deb5e0c33e4e2060aa45051a",
+      "git_blob_sha": "09de4dc5cc279c623e1aadd9d753ffb86c992dfc"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/prompts.json",
+      "size_bytes": 3508,
+      "sha256": "cdd36cc35ffb65cf60340b22d9845ff8806e65e6c2f039c2f014a08bffaa77c4",
+      "git_blob_sha": "52417b4a8be513f43b63bf26eed05a6f6b559332"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/results.jsonl",
+      "size_bytes": 73758,
+      "sha256": "bb94f004be3ad29a43adb7cdb8e38651d2f14d04ce9c3f11741d168547b53f6f",
+      "git_blob_sha": "531bbefe93d950413118295bcf593efdb7e9e05f"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/review-metrics.json",
+      "size_bytes": 1893,
+      "sha256": "0e0e65df44eeb0e9171f105d30c70590a2d417e2924ebad90b7480bcb1fe262f",
+      "git_blob_sha": "959951e922c732a96bb20459f3dfae7c0e476220"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/summary.json",
+      "size_bytes": 596,
+      "sha256": "7df85d45fd228a077813e704dc04e890d410b31cf5bd8847708909bb9004c4c6",
+      "git_blob_sha": "c949ad13ac81f1681f18389153103b2ab961aa5a"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/summary.md",
+      "size_bytes": 502,
+      "sha256": "7acd69505e7558a53cb36263419e6105a6aa88c7e0b270e2717ba77c43e9d942",
+      "git_blob_sha": "7110ea5792a288c96c6bda10bcd82015dde74d8e"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.3-codex/verify.py",
+      "size_bytes": 5072,
+      "sha256": "fd8de56693b6428ec9918b9e24b78cec67a12afb4d34740cdbdf56da2984c8bb",
+      "git_blob_sha": "a0acf96218828b6fbaebc82b7c991aec8a12c667"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/REVIEW.md",
+      "size_bytes": 7531,
+      "sha256": "1cc83d7cb74b8711c20620bc9ec0481b94b6f0f113c54d3c694841f0b56f9c25",
+      "git_blob_sha": "f98fb88b592d7541dd3c609ad2ad552d105757fb"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/SHA256SUMS.txt",
+      "size_bytes": 786,
+      "sha256": "59c7a8951e7af6950b9884800db54a9b4219c263d0458b53404b28de66ca0a43",
+      "git_blob_sha": "0fac351e2f2e85ba833a45a23507d2498e0d4317"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/cases.json",
+      "size_bytes": 8626,
+      "sha256": "978089e1c2b4e05cdddef0f696299208e7a542569deed40f4d3a93bf9ba7f807",
+      "git_blob_sha": "21537b075d6214772434e722ab0304e400f57891"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/gold.json",
+      "size_bytes": 2643,
+      "sha256": "6f9a93ca7c4bc4f700ccff0261eee55ed43367d3ebce098a810211796be6c83c",
+      "git_blob_sha": "ae040d61e231acc77df8ba8257377c332de30abb"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/manifest.json",
+      "size_bytes": 3545,
+      "sha256": "b456bb8038dfb5c455acb7f0560096604b962efa55f32101a2a882264977a5b1",
+      "git_blob_sha": "33355d8b4068673675cf0ad5b2a5f604a8dfe1f5"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/prompts.json",
+      "size_bytes": 3508,
+      "sha256": "cdd36cc35ffb65cf60340b22d9845ff8806e65e6c2f039c2f014a08bffaa77c4",
+      "git_blob_sha": "52417b4a8be513f43b63bf26eed05a6f6b559332"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/results.jsonl",
+      "size_bytes": 69199,
+      "sha256": "83dc82b559711c618d8dafa32b52a1998c7b86ca78453bd5a3e369af3975644b",
+      "git_blob_sha": "c0bcceaacaa3a751dd51c26572f765d82a5b129f"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/review-metrics.json",
+      "size_bytes": 1313,
+      "sha256": "9a877e344b49b239ae036a0c0706200bbae847f1b5c988b35bf4a70a777e7a90",
+      "git_blob_sha": "298a4ee24e1d6d55229d47f805976d5ce63dca93"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/summary.json",
+      "size_bytes": 599,
+      "sha256": "f0fc82aa4ddb9715e24182d2b01c3698129ba59d971a3b8cf19b15fd52de455c",
+      "git_blob_sha": "14e16fe362dd18ef6f8249093e969742180424aa"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/summary.md",
+      "size_bytes": 502,
+      "sha256": "dcc4f377b0d97ad7f2df630ed1e7a179824384da1d7c7a71703764830523f4a2",
+      "git_blob_sha": "cc0fd94d7ed8a277d3ee74e41255c8fbbd9e6c4d"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt-5.4-mini/verify.py",
+      "size_bytes": 4016,
+      "sha256": "d67951513eb894b096c88b98ffe4254d60ca82866f8599680e4dbbb8c6cbf69e",
+      "git_blob_sha": "9ea63230d5a752465cb70ea42955d841f9361499"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/REVIEW.md",
+      "size_bytes": 8105,
+      "sha256": "14ec7a33f1b0d350920d1a6e28ceb77dcfc470c7d3b1c05d031a66a1403d8977",
+      "git_blob_sha": "16e00e60e09f10ffd4a092209cef1ee9ed5ef23e"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/SHA256SUMS.txt",
+      "size_bytes": 1367,
+      "sha256": "e8791891591106b3051129cc6a79e375405e280263ce4e89ac5314c578b4ea8e",
+      "git_blob_sha": "ef64aa7c28420e7cd849c4437a20dabf98edcd82"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/comparison-metrics.json",
+      "size_bytes": 12626,
+      "sha256": "d91ee0392a73292e7a102b36e9f9fe43b1f8bfc474f4898c5df4e8f31e7f5b5e",
+      "git_blob_sha": "a9c1c344a11cd16b7b650199047288a156f154e9"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/cases.json",
+      "size_bytes": 8626,
+      "sha256": "978089e1c2b4e05cdddef0f696299208e7a542569deed40f4d3a93bf9ba7f807",
+      "git_blob_sha": "21537b075d6214772434e722ab0304e400f57891"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/gold.json",
+      "size_bytes": 2643,
+      "sha256": "6f9a93ca7c4bc4f700ccff0261eee55ed43367d3ebce098a810211796be6c83c",
+      "git_blob_sha": "ae040d61e231acc77df8ba8257377c332de30abb"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/manifest.json",
+      "size_bytes": 3552,
+      "sha256": "b5798adac0b805b5d961f27371780848b0b1141d045fac24474391a2a033aed3",
+      "git_blob_sha": "eae11c704b029219e85828c04e3dc30026663125"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/prompts.json",
+      "size_bytes": 3508,
+      "sha256": "cdd36cc35ffb65cf60340b22d9845ff8806e65e6c2f039c2f014a08bffaa77c4",
+      "git_blob_sha": "52417b4a8be513f43b63bf26eed05a6f6b559332"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/results.jsonl",
+      "size_bytes": 75283,
+      "sha256": "f55a60c67ad5965d4811931017e5243179c41b48fc19217fd822e045d3e0afd7",
+      "git_blob_sha": "1e791614084a42ce74d7e185dbdcae504fcdfe8e"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/summary.json",
+      "size_bytes": 599,
+      "sha256": "45b26afe86299735afbc1875f41c22428671b448bb8a212bd374b212f68648e1",
+      "git_blob_sha": "3bec8d01c1e1aa8ca3f8e6164f0fb27675b4128b"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4.1/summary.md",
+      "size_bytes": 502,
+      "sha256": "b1039c6855f61501615fc8f78b05afddff002ad6b38e1107a6a3de5596bb5487",
+      "git_blob_sha": "fe027ee7c5dd480229e61df2970309b19355d829"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/cases.json",
+      "size_bytes": 8626,
+      "sha256": "978089e1c2b4e05cdddef0f696299208e7a542569deed40f4d3a93bf9ba7f807",
+      "git_blob_sha": "21537b075d6214772434e722ab0304e400f57891"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/gold.json",
+      "size_bytes": 2643,
+      "sha256": "6f9a93ca7c4bc4f700ccff0261eee55ed43367d3ebce098a810211796be6c83c",
+      "git_blob_sha": "ae040d61e231acc77df8ba8257377c332de30abb"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/manifest.json",
+      "size_bytes": 3539,
+      "sha256": "6d9215aeae99fe9cd413792b85ad91c9367fad9d7e31730e6517b41b3ed47562",
+      "git_blob_sha": "d1c73b077ffd5c8312a55f0606bc29db27a25dde"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/prompts.json",
+      "size_bytes": 3508,
+      "sha256": "cdd36cc35ffb65cf60340b22d9845ff8806e65e6c2f039c2f014a08bffaa77c4",
+      "git_blob_sha": "52417b4a8be513f43b63bf26eed05a6f6b559332"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/results.jsonl",
+      "size_bytes": 64884,
+      "sha256": "1307b96b74f3c5d59a1718ffad980005ee74266258623e57b2b42058d5962f2f",
+      "git_blob_sha": "efdd431b91ea7889c49803025a8e49d27ac6a972"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/summary.json",
+      "size_bytes": 593,
+      "sha256": "4e9017b66412fc6dde5b3ca2ec48a7209b285014cc514e20e565b91a3fecfae6",
+      "git_blob_sha": "bae5268a9b16b183cc1c57d043c8c6043d2ae241"
+    },
+    {
+      "path": "experiments/2026-10-30-gpt4-comparison/gpt-4o/summary.md",
+      "size_bytes": 502,
+      "sha256": "a4602b8f26096e69d02c5be1187613d6239c950fc39f52e67adddb273184a0ae",
+      "git_blob_sha": "761e9dfbdc7ccad235f8ab87ea45823b97e27ba3"
+    }
+  ],
+  "runs": [
+    {
+      "label": "GPT-5.4 Mini",
+      "directory": "experiments/2026-10-30-gpt-5.4-mini",
+      "review_path": "experiments/2026-10-30-gpt-5.4-mini/REVIEW.md",
+      "github_run_id": 40897728014,
+      "github_attempt": 2,
+      "github_run_url": "https://github.com/QSOLKCB/RECEIPTS/actions/runs/40897728014/attempts/2",
+      "artifact_id": 12908806614,
+      "artifact_zip_sha256": "d4b7c646ee6e207dce82f46d2f1c525dd854997af227b3efc28633537ba01453",
+      "usd_per_million_tokens": {
+        "uncached_input": "0.75",
+        "cached_input": "0.075",
+        "output": "4.50"
+      },
+      "pricing_url": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+      "recorded_results": {
+        "model_requested": "gpt-5.4-mini-2026-03-17",
+        "provider_returned_models": {
+          "gpt-5.4-mini-2026-03-17": 32
+        },
+        "source_commit": "6de64705805219ac025c2f318df94aec4652ac26",
+        "run_status": "completed",
+        "started_at_utc": "2026-10-29T15:14:55.179183Z",
+        "ended_at_utc": "2026-10-29T15:15:50.467506Z",
+        "max_output_tokens_per_call": 1200,
+        "seed_for_order_only": 42,
+        "cases_sha256": "f1a9397b593354889e91d344da6f1122a225c3292b9d9a2da47658e94fee471b",
+        "gold_sha256": "d43ebd252ce3302651930ce796360f054b8d0b7a7d3d2ed56cb7889f15a81efb",
+        "prompt_sha256": {
+          "baseline": "4a8593eaa57e868dc33eb6620f937a6e0fb2af5c93f104da1ce23df04ba161b9",
+          "receipts": "ee5a7bce0ec033cb62867389ebdf5724237cf42874d6b153ea40cbef2e00a8ce"
+        },
+        "responses": 32,
+        "variants": {
+          "baseline": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 15,
+              "accuracy_over_all_attempts": 0.9375,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 13
+            },
+            "usage": {
+              "input_tokens": 8987,
+              "output_tokens": 2318,
+              "total_tokens": 11305,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.01717125"
+            }
+          },
+          "receipts": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 15,
+              "accuracy_over_all_attempts": 0.9375,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 12
+            },
+            "usage": {
+              "input_tokens": 16971,
+              "output_tokens": 2177,
+              "total_tokens": 19148,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.02252475"
+            }
+          }
+        },
+        "invalid_outputs": [],
+        "total_estimated_usd": "0.03969600"
+      }
+    },
+    {
+      "label": "GPT-4o",
+      "directory": "experiments/2026-10-30-gpt4-comparison/gpt-4o",
+      "review_path": "experiments/2026-10-30-gpt4-comparison/REVIEW.md",
+      "github_run_id": 40901024539,
+      "github_attempt": 1,
+      "github_run_url": "https://github.com/QSOLKCB/RECEIPTS/actions/runs/40901024539/attempts/1",
+      "artifact_id": 12910016000,
+      "artifact_zip_sha256": "e53270efe08b16ee892bacd6e2a77adc4d6e53366c9a139f77373994e64ab40d",
+      "usd_per_million_tokens": {
+        "uncached_input": "2.50",
+        "cached_input": "1.25",
+        "output": "10.00"
+      },
+      "pricing_url": "https://developers.openai.com/api/docs/models/gpt-4o",
+      "recorded_results": {
+        "model_requested": "gpt-4o-2024-11-20",
+        "provider_returned_models": {
+          "gpt-4o-2024-11-20": 32
+        },
+        "source_commit": "3a683d5095015307403d7503b3833d156b48a51c",
+        "run_status": "completed",
+        "started_at_utc": "2026-10-29T15:23:22.284910Z",
+        "ended_at_utc": "2026-10-29T15:24:13.363440Z",
+        "max_output_tokens_per_call": 1200,
+        "seed_for_order_only": 42,
+        "cases_sha256": "f1a9397b593354889e91d344da6f1122a225c3292b9d9a2da47658e94fee471b",
+        "gold_sha256": "d43ebd252ce3302651930ce796360f054b8d0b7a7d3d2ed56cb7889f15a81efb",
+        "prompt_sha256": {
+          "baseline": "4a8593eaa57e868dc33eb6620f937a6e0fb2af5c93f104da1ce23df04ba161b9",
+          "receipts": "ee5a7bce0ec033cb62867389ebdf5724237cf42874d6b153ea40cbef2e00a8ce"
+        },
+        "responses": 32,
+        "variants": {
+          "baseline": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 16,
+              "accuracy_over_all_attempts": 1.0,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 15
+            },
+            "usage": {
+              "input_tokens": 9019,
+              "output_tokens": 1833,
+              "total_tokens": 10852,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.0408775"
+            }
+          },
+          "receipts": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 16,
+              "accuracy_over_all_attempts": 1.0,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 14
+            },
+            "usage": {
+              "input_tokens": 17003,
+              "output_tokens": 1714,
+              "total_tokens": 18717,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.0596475"
+            }
+          }
+        },
+        "invalid_outputs": [],
+        "total_estimated_usd": "0.1005250"
+      }
+    },
+    {
+      "label": "GPT-4.1",
+      "directory": "experiments/2026-10-30-gpt4-comparison/gpt-4.1",
+      "review_path": "experiments/2026-10-30-gpt4-comparison/REVIEW.md",
+      "github_run_id": 40901024539,
+      "github_attempt": 1,
+      "github_run_url": "https://github.com/QSOLKCB/RECEIPTS/actions/runs/40901024539/attempts/1",
+      "artifact_id": 12909956145,
+      "artifact_zip_sha256": "b12205c87da1d24ebebcdc99b1b81b014c15e6e7bc026af889568e25b7a453a2",
+      "usd_per_million_tokens": {
+        "uncached_input": "2.00",
+        "cached_input": "0.50",
+        "output": "8.00"
+      },
+      "pricing_url": "https://developers.openai.com/api/docs/models/gpt-4.1",
+      "recorded_results": {
+        "model_requested": "gpt-4.1-2025-04-14",
+        "provider_returned_models": {
+          "gpt-4.1-2025-04-14": 32
+        },
+        "source_commit": "3a683d5095015307403d7503b3833d156b48a51c",
+        "run_status": "completed_with_errors",
+        "started_at_utc": "2026-10-29T15:23:22.320957Z",
+        "ended_at_utc": "2026-10-29T15:24:35.708768Z",
+        "max_output_tokens_per_call": 1200,
+        "seed_for_order_only": 42,
+        "cases_sha256": "f1a9397b593354889e91d344da6f1122a225c3292b9d9a2da47658e94fee471b",
+        "gold_sha256": "d43ebd252ce3302651930ce796360f054b8d0b7a7d3d2ed56cb7889f15a81efb",
+        "prompt_sha256": {
+          "baseline": "4a8593eaa57e868dc33eb6620f937a6e0fb2af5c93f104da1ce23df04ba161b9",
+          "receipts": "ee5a7bce0ec033cb62867389ebdf5724237cf42874d6b153ea40cbef2e00a8ce"
+        },
+        "responses": 32,
+        "variants": {
+          "baseline": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 1,
+              "verdict_correct": 11,
+              "accuracy_over_all_attempts": 0.6875,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 15,
+              "required_limitations_present": 13
+            },
+            "usage": {
+              "input_tokens": 9019,
+              "output_tokens": 2415,
+              "total_tokens": 11434,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.037358"
+            }
+          },
+          "receipts": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 13,
+              "accuracy_over_all_attempts": 0.8125,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 13
+            },
+            "usage": {
+              "input_tokens": 17003,
+              "output_tokens": 2510,
+              "total_tokens": 19513,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.054086"
+            }
+          }
+        },
+        "invalid_outputs": [
+          {
+            "case_id": "offensive-content-attribution",
+            "variant": "baseline",
+            "errors": [
+              "wrong_claim_id"
+            ]
+          }
+        ],
+        "total_estimated_usd": "0.091444"
+      }
+    },
+    {
+      "label": "GPT-5.3-Codex",
+      "directory": "experiments/2026-10-30-gpt-5.3-codex",
+      "review_path": "experiments/2026-10-30-gpt-5.3-codex/REVIEW.md",
+      "github_run_id": 40903696290,
+      "github_attempt": 1,
+      "github_run_url": "https://github.com/QSOLKCB/RECEIPTS/actions/runs/40903696290/attempts/1",
+      "artifact_id": 12909429526,
+      "artifact_zip_sha256": "9aa56e2554732ff0829b240ef9ec8d1faed83f913ca4237156c78b1782b01619",
+      "usd_per_million_tokens": {
+        "uncached_input": "1.75",
+        "cached_input": "0.175",
+        "output": "14"
+      },
+      "pricing_url": "https://developers.openai.com/api/docs/models/gpt-5.3-codex",
+      "recorded_results": {
+        "model_requested": "gpt-5.3-codex",
+        "provider_returned_models": {
+          "gpt-5.3-codex": 32
+        },
+        "source_commit": "6a995e85b4855a4716c4bc9104e7504b48c752b6",
+        "run_status": "completed",
+        "started_at_utc": "2026-10-29T15:39:04.418685Z",
+        "ended_at_utc": "2026-10-29T15:40:50.772548Z",
+        "max_output_tokens_per_call": 1200,
+        "seed_for_order_only": 42,
+        "cases_sha256": "f1a9397b593354889e91d344da6f1122a225c3292b9d9a2da47658e94fee471b",
+        "gold_sha256": "d43ebd252ce3302651930ce796360f054b8d0b7a7d3d2ed56cb7889f15a81efb",
+        "prompt_sha256": {
+          "baseline": "4a8593eaa57e868dc33eb6620f937a6e0fb2af5c93f104da1ce23df04ba161b9",
+          "receipts": "ee5a7bce0ec033cb62867389ebdf5724237cf42874d6b153ea40cbef2e00a8ce"
+        },
+        "responses": 32,
+        "variants": {
+          "baseline": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 15,
+              "accuracy_over_all_attempts": 0.9375,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 14
+            },
+            "usage": {
+              "input_tokens": 8987,
+              "output_tokens": 2400,
+              "total_tokens": 11387,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.04932725"
+            }
+          },
+          "receipts": {
+            "summary": {
+              "attempted": 16,
+              "api_errors": 0,
+              "invalid_outputs": 0,
+              "verdict_correct": 16,
+              "accuracy_over_all_attempts": 1.0,
+              "unsupported_support": 0,
+              "unnecessary_abstention": 0,
+              "required_citations_present": 16,
+              "required_limitations_present": 13
+            },
+            "usage": {
+              "input_tokens": 16971,
+              "output_tokens": 2520,
+              "total_tokens": 19491,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "estimated_usd": "0.06497925"
+            }
+          }
+        },
+        "invalid_outputs": [],
+        "total_estimated_usd": "0.11430650"
+      }
+    }
+  ],
+  "totals": {
+    "models": 4,
+    "responses": 128,
+    "input_tokens": 103960,
+    "output_tokens": 17887,
+    "total_tokens": 121847,
+    "cached_input_tokens": 0,
+    "reasoning_tokens": 0,
+    "invalid_outputs": 1,
+    "api_errors": 0,
+    "total_estimated_usd": "0.34597150"
+  },
+  "prior_setup_attempt": {
+    "github_run_id": 40897728014,
+    "github_attempt": 1,
+    "model_calls": 0,
+    "outcome": "blocked_missing_api_key",
+    "evidence_path": "experiments/2026-10-30-gpt-5.4-mini/REVIEW.md",
+    "raw_artifact_in_this_inventory": false
+  },
+  "limitations": [
+    "Public AI-assisted development fixtures, not independently adjudicated or held out.",
+    "One response per model/case/prompt; no general rankings or reliable prompt-effect estimate.",
+    "Two ambiguous claim wordings remain unchanged in historical gold.",
+    "Provider-reported model identity is not independent attestation.",
+    "Full raw provider envelopes were not retained; their stored byte hashes cannot be recomputed.",
+    "Archive ZIP digests were checked at download; ZIP containers are not duplicated in this Git inventory.",
+    "Token-based costs use recorded published standard rates and are not billing reconciliation.",
+    "This inventory checks preserved bytes and aggregate arithmetic, not independent truth or provenance attestation."
+  ]
+}

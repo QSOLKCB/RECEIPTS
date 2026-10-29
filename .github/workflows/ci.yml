@@ -19,6 +19,10 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
+      - name: Verify preserved experiment records
+        run: |
+          python experiments/preservation-2026-10-30/verify.py
+          python -O experiments/preservation-2026-10-30/verify.py
       - name: Prepare paired experiment without inference
         env:
           PYTHONPATH: src

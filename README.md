@@ -88,6 +88,11 @@ GPT-5.3 Instant or ChatGPT's conversational behaviour.
 
 ## What the first experiment measures
 
+See the [preserved experiment index](experiments/README.md) for all 128 responses,
+provenance, aggregate costs and offline archive verification. Future work is
+outlined in [ROADMAP.md](ROADMAP.md); agent contributors should read
+[AGENTS.md](AGENTS.md) and [INVARIANTS.md](INVARIANTS.md).
+
 **First completed run:** both prompts scored 15/16 on the frozen development
 labels; this run showed no verdict-accuracy advantage for RECEIPTS. A funding
 case exposed unsupported contradiction, and post-run inspection found an
