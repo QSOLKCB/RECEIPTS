@@ -6,6 +6,7 @@ No keywords, model judge, network, collection or inference are used here.
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import random
 import sys
@@ -152,7 +153,11 @@ def strict_json(text):
         return result
     def constant(value):
         raise ValueError("Non-finite JSON value")
-    return json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+    def finite_float(value):
+        number = float(value)
+        require(math.isfinite(number), "Non-finite JSON value")
+        return number
+    return json.loads(text, object_pairs_hook=pairs, parse_constant=constant, parse_float=finite_float)
 
 
 def load_run(directory):

@@ -44,6 +44,26 @@ def rate(row, dimension, status):
 
 
 class ActionSuiteTests(unittest.TestCase):
+    def test_overflow_answer_is_preserved_as_invalid_in_a_reviewable_run(self):
+        for literal in ("1e999", "-1e999", "1E+999", "1.7976931348623159e308"):
+            text = '{"next_evidence":"Review the public filing","overflow":' + literal + '}'
+            with self.subTest(literal=literal), tempfile.TemporaryDirectory() as directory, patch.dict(
+                    "os.environ", {"OPENAI_API_KEY": "synthetic-placeholder"}), patch(
+                    "receipts.runner.api_call", return_value={"status": "completed", "text": text}), contextlib.redirect_stdout(io.StringIO()):
+                output = Path(directory) / "run"
+                self.assertEqual(runner.run(ROOT, output, "stub", 1, 42, 1200, False, "v0.3"), 1)
+                manifest, _, _, records, _ = review.load_run(output)
+                self.assertEqual(manifest["status"], "completed_with_errors")
+                self.assertEqual((manifest["attempted_calls"], manifest["completed_calls"]), (2, 2))
+                for record in records:
+                    self.assertEqual(record["response"]["text"], text)
+                    self.assertIsNone(record["answer"])
+                    self.assertEqual(record["status"], "invalid_output")
+                    self.assertFalse(record["score"]["valid"])
+                report = review.report(output, output / "action-review-template.json", Path(directory) / "report")
+                self.assertEqual(sum(v["unavailable_proposals"] for v in report["action_assessments"].values()), 2)
+                self.assertEqual(sum(v["structured_proposals"] for v in report["action_assessments"].values()), 0)
+
     def test_sixteen_cases_cover_access_routes_stopping_and_effect_limits(self):
         cases, gold = suite.load_suite(ROOT)
         self.assertEqual(len(cases), 16)
@@ -311,8 +331,16 @@ class ReviewTests(unittest.TestCase):
         with self.assertRaises(ValueError): review.load_run(self.run)
 
     def test_json_duplicate_keys_and_nonfinite_values_are_rejected(self):
-        for text in ('{"status":"pass","status":"fail"}', '{"value":NaN}', '{"value":Infinity}'):
+        for text in ('{"status":"pass","status":"fail"}', '{"value":NaN}', '{"value":Infinity}',
+                     '{"value":-Infinity}', '1e999', '-1e999', '{"nested":[{"value":1E+999}]}'):
             with self.assertRaises(ValueError): review.strict_json(text)
+
+    def test_finite_json_numbers_keep_standard_parsing(self):
+        text = '[1.5,-2.5e1,1.7976931348623157e308,1e-999,-0.0,9007199254740993]'
+        parsed = review.strict_json(text)
+        self.assertEqual(parsed, json.loads(text))
+        self.assertEqual(parsed[4].hex(), '-0x0.0p+0')
+        self.assertIs(type(parsed[5]), int)
 
     def test_cli_reports_invalid_review_without_echoing_untrusted_text(self):
         path = self.work / "bad.json"
