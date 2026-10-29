@@ -1,0 +1,24 @@
+{
+  "baseline": {
+    "attempted": 16,
+    "api_errors": 0,
+    "invalid_outputs": 1,
+    "verdict_correct": 11,
+    "accuracy_over_all_attempts": 0.6875,
+    "unsupported_support": 0,
+    "unnecessary_abstention": 0,
+    "required_citations_present": 15,
+    "required_limitations_present": 13
+  },
+  "receipts": {
+    "attempted": 16,
+    "api_errors": 0,
+    "invalid_outputs": 0,
+    "verdict_correct": 13,
+    "accuracy_over_all_attempts": 0.8125,
+    "unsupported_support": 0,
+    "unnecessary_abstention": 0,
+    "required_citations_present": 16,
+    "required_limitations_present": 13
+  }
+}

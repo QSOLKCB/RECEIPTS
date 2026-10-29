@@ -88,6 +88,21 @@ ambiguity in another case's wording. All 32 responses and the unchanged scores
 are preserved in the [first experiment and review](experiments/2026-10-30-gpt-5.4-mini/REVIEW.md).
 Estimated API cost was USD 0.039696. These are preliminary development results.
 
+The [requested GPT-4o/GPT-4.1 follow-up](experiments/2026-10-30-gpt4-comparison/REVIEW.md)
+used unchanged inputs and scoring:
+
+| Model | Baseline | RECEIPTS |
+|---|---:|---:|
+| GPT-5.4 Mini | 15/16 | 15/16 |
+| GPT-4o | 16/16 | 16/16 |
+| GPT-4.1 | 11/16 | 13/16 |
+
+GPT-4.1's strict-score gain comprises one corrected uncertainty judgment and one
+corrected claim ID. Two of its other scored mismatches involve ambiguous
+evidentiary-sufficiency wording. This small, single-run development suite does not
+establish general model rankings or reliable prompt improvement. All 96 responses
+are preserved; estimated total API cost was USD 0.231665.
+
 The 16 original synthetic development cases cover account continuity, recycled
 handles, human attribution, small writing samples, direct versus indirect funding,
 donor direction, incomplete searches, copied reporting, UTC dates, archive capture
